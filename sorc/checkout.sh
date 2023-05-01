@@ -176,7 +176,7 @@ fi
 if [[ ! -d prepchem_NC.fd ]] ; then
 echo prepchem_NC.fd checkout ...
     rm -f ${topdir}/checkout-prepchem_NC.fd.log
-    git clone  gerrit:GSD-prep-chem prepchem_NC.fd >> ${topdir}/checkout-prepchem_NC.fd.log 2>&1
+    git clone -b develop https://github.com/NOAA-GSL/GSL-prep-chem  prepchem_NC.fd >> ${topdir}/checkout-prepchem_NC.fd.log 2>&1
     cd ${topdir}
 else
     echo 'Skip.  Directory prepchem_NC.fd already exists.'
