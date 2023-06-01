@@ -64,6 +64,7 @@ fi
 if [ $DO_GChem = "YES" ]; then
   export cplchp=".true."
 fi
+
 if [ $DO_ICE = "YES" ]; then
   export cplice=".true."
   export cplflx=".true."
@@ -73,6 +74,11 @@ if [ $DO_OCN = "YES" ]; then
 fi
 if [ $DO_WAVE = "YES" ]; then
   export cplwav=".true."
+fi
+
+if [[ $DO_GChem = "YES" ]] && [[ $DO_COUPLED = "YES" ]]; then
+  export cplchp=".true."
+  export GBDAY=35
 fi
 
 #######################################################################
@@ -389,10 +395,13 @@ fi
 if [ $DO_GChem = "YES" ]; then # temporary settings for aerosol coupling
     export AERO_DIAG_TABLE="${AERO_DIAG_TABLE:-$HOMEgfs/parm/parm_fv3diag/diag_table.gchem}"
     export AERO_FIELD_TABLE="${AERO_FIELD_TABLE:-$HOMEgfs/parm/parm_fv3diag/field_table.gchem}"
-    export fscav_aero="'*:0.2','so2:0.1','msa:0.1','dms:0.1','sulf:0.9','bc1:0.3','bc2:0.3','oc1:0.3','oc2:0.3','seas1:0.5','seas2:0.5','seas3:0.5','seas4:0.5','seas5:0.5'"
+    export fscav_aero="'*:0.2','so2:0.0','msa:0.0','dms:0.0','sulf:0.9','bc1:0.3','bc2:0.3','oc1:0.3','oc2:0.3','seas1:0.4','seas2:0.4','seas3:0.4','seas4:0.4','seas5:0.4','dust1:0.55','dust2:0.55','dust3:0.55','dust4:0.55','dust5:0.55'"
     #export fscav_aero="'*:0.0'"
-    export dust_alpha="${dust_alpha:-1.0}"
-    export dust_gamma="${dust_gamma:-1.6}"
+    # if dust_opt_cplchp=3 (afwa):alpha=2.0, gamma=1.2
+    # if dust_opt_cplchp=5 (fengsha): alpha=3.0, gamma=1.0
+    export dust_opt_cplchp="${dust_opt_cplchp:-5}"
+    export dust_alpha="${dust_alpha:-3.0}"
+    export dust_gamma="${dust_gamma:-1.0}"
     export dnats_aero="${aero_diag_tracers:-0}"
 fi
 # Remember config.efcs will over-ride these values for ensemble forecasts

@@ -19,7 +19,7 @@ status=$?
 
 ###############################################################
 # Source relevant configs
-configs="base prepchem"
+configs="base fcst prepchem"
 for config in $configs; do
     . $EXPDIR/config.${config}
     status=$?
@@ -157,7 +157,32 @@ EOF
              exit $status
         fi
       fi
-      eval $NLN $NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc .
+
+      rm -rf  *FIRE_GBBEPx_data.tile${n}.nc 
+      if [ $GBDAY -eq 1 ]; then
+        eval $NLN $NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc .
+      else
+        j_day=$(date -d "$emiss_date1" "+%j")           
+        echo "Julian day: $j_day"
+        end_day=$((j_day+GBDAY-1))
+        echo "end_day: $end_day"
+       for (( i=${j_day}; i<=${end_day}; i++ )) 
+       do
+         jd=$((i-j_day+1))
+        echo "jd: $jd"
+      #  if [ $jd -lt 10 ]; then
+      #     jj=0${jd}
+      #  else
+           jj=${jd}
+      #  fi
+         day_of_year=$i 
+         date=$(date -d "$SYEAR-01-01 +$(( $day_of_year - 1 )) days" +"%Y-%m-%d")
+         echo "Date: $date"
+         nmonth=$(echo $date | awk -F'-' '{print $2}')
+         nday=$(echo $date | awk -F'-' '{print $3}')
+         eval $NCP $NCGB/${SYEAR}${nmonth}${nday}/FIRE_GBBEPx_data.tile${n}.nc d${jj}_FIRE_GBBEPx_data.tile${n}.nc 
+       done
+      fi
     fi
     
     if [ $EMITYPE -eq 1 ]; then 

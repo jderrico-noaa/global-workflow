@@ -167,6 +167,7 @@ export DOBNDPNT_WAVE="NO"
 export cplwav2atm=".false."
 
 export EMITYPE=2 # 1: MODIS, 2: GBBEPx 
+export EMIYEAR=2019 # 2014: CEDS, 2019: CEDS
 
 case "${APP}" in
   ATM)
@@ -193,6 +194,7 @@ case "${APP}" in
     export DO_ICE="YES"
     export CCPP_SUITE="FV3_GFS_v17_coupled_p8"
     export confignamevarfornems="cpld"
+    export DO_GB35="YES"
 
     if [[ "$APP" =~ A$ ]]; then
         export DO_AERO="YES"
