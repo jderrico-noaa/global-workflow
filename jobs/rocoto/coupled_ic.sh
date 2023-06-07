@@ -51,6 +51,14 @@ fi
 
 # Setup ATM initial condition files
 cp -r $BASE_CPLIC/$CPL_ATMIC/$CDATE/$CDUMP/*  $ICSDIR/$CDATE/atmos/
+if [ $DO_GChem="YES" ]; then
+module load nco
+cd $ICSDIR/$CDATE/atmos/$CASE/INPUT/
+for n in $(seq 1 6); do
+ncrename -v so4,sulf gfs_data.tile${n}.nc -O -o gfs_data.tile${n}.nc
+done
+fi 
+
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   echo "FATAL: Unable to copy $BASE_CPLIC/$CPL_ATMIC/$CDATE/$CDUMP/* to $ICSDIR/$CDATE/atmos/ (Error code $rc)" 

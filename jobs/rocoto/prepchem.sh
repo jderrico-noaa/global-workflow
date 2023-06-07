@@ -112,6 +112,7 @@ for n in $(seq 1 6); do
       #mkdir -p $DIRGB/$emiss_date1
       #$NCP $PUBEMI/*${emiss_date1}.*.bin $DIRGB/$emiss_date1/
     
+
       if [[ -f $NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc ]]; then
         echo "NetCDF GBBEPx File $DIRGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."
       else
@@ -132,7 +133,7 @@ for n in $(seq 1 6); do
       
         mkdir -p $NCGB/${emiss_date1}
         set -ue
-        module load intel netcdf szip hdf5
+        module load intel/19.0.5.281 netcdf szip hdf5
         set -x
         $NLN $EXECgfs/mkncgbbepx .
  ./mkncgbbepx <<EOF
@@ -143,7 +144,7 @@ for n in $(seq 1 6); do
        nlon = ${res}
        nlat = ${res}
        outfile     = "$NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc"
-       pathoro     = "$FIXgfs/fix_fv3/${CASE}/${CASE}_oro_data.tile${n}.nc"
+       pathoro     = "$FIXgfs/fix_orog/${CASE}/${CASE}_oro_data.tile${n}.nc"
        pathebc     = "$DIRGB/${emiss_date1}/$BC"
        patheoc     = "$DIRGB/${emiss_date1}/$OC"
        pathepm25   = "$DIRGB/${emiss_date1}/$PM25"
@@ -159,6 +160,7 @@ EOF
       fi
 
       rm -rf  *FIRE_GBBEPx_data.tile${n}.nc 
+
       if [ $GBDAY -eq 1 ]; then
         eval $NLN $NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc .
       else
@@ -170,16 +172,58 @@ EOF
        do
          jd=$((i-j_day+1))
         echo "jd: $jd"
-      #  if [ $jd -lt 10 ]; then
-      #     jj=0${jd}
-      #  else
            jj=${jd}
-      #  fi
          day_of_year=$i 
          date=$(date -d "$SYEAR-01-01 +$(( $day_of_year - 1 )) days" +"%Y-%m-%d")
          echo "Date: $date"
          nmonth=$(echo $date | awk -F'-' '{print $2}')
          nday=$(echo $date | awk -F'-' '{print $3}')
+
+       if [[ -f $NCGB/${SYEAR}${nmonth}${nday}/FIRE_GBBEPx_data.tile${n}.nc ]]; then
+        echo "NetCDF GBBEPx File $DIRGB/${SYEAR}${nmonth}${nday}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."
+      else
+
+        if [ ${SYEAR} -eq 2016 ];  then
+          BC=GBBEPx.emis_BC.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          OC=GBBEPx.emis_OC.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          PM25=GBBEPx.emis_PM25.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          SO2=GBBEPx.emis_SO2.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          FRP=GBBEPx.FRP.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+        else
+          BC=GBBEPx.bc.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          OC=GBBEPx.oc.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          PM25=GBBEPx.pm25.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          SO2=GBBEPx.so2.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          FRP=meanFRP.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+        fi
+
+        mkdir -p $NCGB/${SYEAR}${nmonth}${nday}
+        set -ue
+        module load intel/19.0.5.281 netcdf szip hdf5
+        set -x
+        $NLN $EXECgfs/mkncgbbepx .
+ ./mkncgbbepx <<EOF
+&mkncgbbepx
+       title = "GBBEPx emission input (${CASE}, 10, tile${n})"
+       tile = ${n}
+       date = '$SYEAR-$nmonth-$nday'
+       nlon = ${res}
+       nlat = ${res}
+       outfile     = "$NCGB/${SYEAR}${nmonth}${nday}/FIRE_GBBEPx_data.tile${n}.nc"
+       pathoro     = "$FIXgfs/fix_orog/${CASE}/${CASE}_oro_data.tile${n}.nc"
+       pathebc     = "$DIRGB/${SYEAR}${nmonth}${nday}/$BC"
+       patheoc     = "$DIRGB/${SYEAR}${nmonth}${nday}/$OC"
+       pathepm25   = "$DIRGB/${SYEAR}${nmonth}${nday}/$PM25"
+       patheso2    = "$DIRGB/${SYEAR}${nmonth}${nday}/$SO2"
+       patheplume  = "$DIRGB/${SYEAR}${nmonth}${nday}/$FRP"
+/
+EOF
+        status=$?
+        if [ $status -ne 0 ]; then
+             echo "error mkncgbbepx failed  $status "
+             exit $status
+        fi
+      fi
          eval $NCP $NCGB/${SYEAR}${nmonth}${nday}/FIRE_GBBEPx_data.tile${n}.nc d${jj}_FIRE_GBBEPx_data.tile${n}.nc 
        done
       fi
