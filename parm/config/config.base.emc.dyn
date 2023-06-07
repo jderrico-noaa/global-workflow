@@ -192,7 +192,8 @@ case "${APP}" in
     export DO_COUPLED="YES"
     export DO_OCN="YES"
     export DO_ICE="YES"
-    export CCPP_SUITE="FV3_GFS_v17_coupled_p8"
+    #export CCPP_SUITE="FV3_GFS_v17_coupled_p8"
+    export CCPP_SUITE="FV3_GFS_v17_coupled_p8_gsd_chem"
     export confignamevarfornems="cpld"
     export DO_GB35="YES"
 
@@ -329,10 +330,10 @@ fi
 # fi
 
 # Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL
-if [ $CCPP_SUITE = "FV3_GFS_v16_gsd_chem" ]; then
+if [[ $CCPP_SUITE = "FV3_GFS_v16_gsd_chem" ]] ; then
   export imp_physics=11
   export DO_GChem="YES"
-elif [ $CCPP_SUITE = "FV3_GFS_v17_p8_gsd_chem" ]; then 
+elif [[ $CCPP_SUITE = "FV3_GFS_v17_p8_gsd_chem" ]] || [[ $CCPP_SUITE = "FV3_GFS_v17_coupled_p8_gsd_chem" ]] ; then 
   export imp_physics=8
   export DO_GChem="YES"
 fi
