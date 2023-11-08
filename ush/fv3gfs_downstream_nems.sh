@@ -44,7 +44,7 @@ export TCYC=${TCYC:-".t${cycn}z."}
 export PREFIX=${PREFIX:-${RUN}${TCYC}}
 export PGB1F=${PGB1F:-"NO"}
 export FHOUT_PGB=${FHOUT_PGB:-3}
-export PGBS=${PGBS:-"NO"} #YES-- generate 1.00 and 0.50 deg pgb data
+export PGBS=${PGBS:-"YES"} #YES-- generate 1.00 and 0.50 deg pgb data
 export MODICEC=${MODICEC:-$USHgfs/mod_icec.sh}
 
 #--wgrib2 regrid parameters

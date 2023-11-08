@@ -361,6 +361,8 @@ rm -f fort.*
 #ln -sf $SIGINP     postgp.inp.sig$$
 #ln -sf $FLXINP     postgp.inp.flx$$
 #ln -sf $PGBOUT     postgp.out.pgb$$
+export AeroFile=${PARMpost}/optics_luts_*.dat #lzhang
+cp ${AeroFile} . #lzhang
 
 # change model generating Grib number 
 if [ ${GRIBVERSION} = grib1 ]; then

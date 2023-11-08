@@ -84,7 +84,8 @@ for n in $(seq 1 6); do
 #    fi
 
     eval $NLN $EMIINPUT/EMI2/$SMONTH/emi2_data.tile${n}.nc .
-    eval $NLN $EMIINPUT/fengsha/$SMONTH/dust_data.tile${n}.nc .
+    #eval $NLN $EMIINPUT/fengsha_2023/$SMONTH/dust_data.tile${n}.nc .
+    eval $NLN $EMIINPUT/fengsha_2023/12month/dust_data_g12m.tile${n}.nc .
     
     if [ $EMITYPE -eq 1 ]; then
       mkdir -p $tiledir

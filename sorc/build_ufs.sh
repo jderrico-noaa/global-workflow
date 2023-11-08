@@ -29,6 +29,7 @@ export RT_COMPILER="intel"
 source $cwd/ufs_model.fd/tests/detect_machine.sh
 MAKE_OPT="-DAPP=${APP} -DCCPP_SUITES=${CCPP_SUITES}"
 #MAKE_OPT="-DAPP=${APP} -DCCPP_SUITES=${CCPP_SUITES} -D32BIT=ON"
+#MAKE_OPT="-DAPP=${APP} -DCCPP_SUITES=${CCPP_SUITES} -DDEBUG=ON"
 [[ ${BUILD_TYPE:-"Release"} = "DEBUG" ]] && MAKE_OPT+=" -DDEBUG=ON"
 COMPILE_NR=0
 CLEAN_BEFORE=YES

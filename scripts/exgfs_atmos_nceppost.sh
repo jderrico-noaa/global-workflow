@@ -287,7 +287,7 @@ else   ## not_anl if_stime
     if [ $GRIBVERSION = 'grib2' ]; then
       export POSTGRB2TBL=${POSTGRB2TBL:-${g2tmpl_ROOT}/share/params_grib2_tbl_new}
       #export PostFlatFile=${PostFlatFile:-$PARMpost/postxconfig-NT-GFS.txt}
-      export PostFlatFile=${PostFlatFile:-$PARMpost/postxconfig-NT-CCPP-CHEM.txt}
+      export PostFlatFile=${PostFlatFile:-$PARMpost/postxconfig-NT-CCPP-CHEM-MET.txt}
 
       if [ $RUN = gfs ]; then
         export IGEN=$IGEN_GFS
@@ -299,9 +299,9 @@ else   ## not_anl if_stime
       if [[ $RUN = gfs ]]; then
         if [ $fhr -eq 0 ]; then
           #export PostFlatFile=$PARMpost/postxconfig-NT-GFS-F00.txt
-          export PostFlatFile=$PARMpost/postxconfig-NT-CCPP-CHEM-F00.txt
+          export PostFlatFile=$PARMpost/postxconfig-NT-CCPP-CHEM-MET-F00.txt
           #export CTLFILE=$PARMpost/postcntrl_gfs_f00.xml
-          export CTLFILE=$PARMpost/postcntrl_ccpp_chem_f00.xml
+          export CTLFILE=$PARMpost/postcntrl_ccpp_chem_met_f00.xml
         else
           export CTLFILE=${CTLFILEGFS:-$PARMpost/postcntrl_gfs.xml}
         fi
