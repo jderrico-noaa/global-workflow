@@ -50,18 +50,27 @@ export OUTDIR=${OUTDIR:-$ROTDIR}
 export COMPONENT="atmos"
 export gfs_ver=${gfs_ver:-"v16"}
 export OPS_RES=${OPS_RES:-"C768"}
-export RUNICSH=${RUNICSH:-${GDASINIT_DIR}/run_v16.chgres.sh}
+#export RUNICSH=${RUNICSH:-${GDASINIT_DIR}/run_v16.chgres.sh}
+
+mkdir -p $DATAROOT
 
 # Check if init is needed and run if so
 if [[ $gfs_ver = "v16" && $EXP_WARM_START = ".true." && $CASE = $OPS_RES ]]; then
   echo "Detected v16 $OPS_RES warm starts, will not run init. Exiting..."
-  
+  exit 0
 else
-  # Run chgres_cube
-  if [ ! -d $OUTDIR ]; then mkdir -p $OUTDIR ; fi
-  sh ${RUNICSH} ${CDUMP}
-  status=$?
-  [[ $status -ne 0 ]] && exit $status
+  rm -rf $ROTDIR/${CDUMP}.${yy}${mm}${dd}/${hh}/atmos/INPUT
+  mkdir -p $ROTDIR/${CDUMP}.${yy}${mm}${dd}/${hh}/atmos
+  if [ $CASE = "C96" ]; then
+    cp -r $ICSORG/${CDUMP}.${yy}${mm}${dd}/${hh}/atmos/INPUT  $ROTDIR/${CDUMP}.${yy}${mm}${dd}/${hh}/atmos/INPUT
+  else
+    cp -r $ICSORG/${yy}${mm}${dd}${hh}/${CDUMP}/$CASE/INPUT  $ROTDIR/${CDUMP}.${yy}${mm}${dd}/${hh}/atmos/INPUT
+  fi
+#  # Run chgres_cube
+#  if [ ! -d $OUTDIR ]; then mkdir -p $OUTDIR ; fi
+#  sh ${RUNICSH} ${CDUMP}
+#  status=$?
+#  [[ $status -ne 0 ]] && exit $status
 fi
 
 ##########################################
@@ -72,6 +81,4 @@ cd $DATAROOT
 
 ###############################################################
 # Exit out cleanly
-
-
 exit 0

@@ -106,7 +106,9 @@ CHECKOUT_GSI="NO"
 CHECKOUT_GDAS="NO"
 checkout_gtg="NO"
 checkout_wafs="NO"
-ufs_model_hash="Prototype-P8"
+checkout_prepchem="YES"
+### 01Dec23 in Kate Zhang's branch
+ufs_model_hash="792a6dd"
 
 # Parse command line arguments
 while getopts ":chgum:o" option; do
@@ -151,7 +153,8 @@ mkdir -p ${logdir}
 
 # The checkout version should always be a speciifc commit (hash or tag), not a branch
 errs=0
-checkout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
+#JKHcheckout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
+checkout "ufs_model.fd"    "https://github.com/zhanglikate/ufs-weather-model.git" "${ufs_model_hash}"; errs=$((errs + $?))
 checkout "ufs_utils.fd"    "https://github.com/ufs-community/UFS_UTILS.git"     "a2b0817"          ; errs=$((errs + $?))
 checkout "verif-global.fd" "https://github.com/NOAA-EMC/EMC_verif-global.git"   "c267780"          ; errs=$((errs + $?))
 
@@ -173,14 +176,18 @@ if [[ $checkout_wafs == "YES" ]]; then
   checkout "gfs_wafs.fd" "https://github.com/NOAA-EMC/EMC_gfs_wafs.git" "014a0b8"; errs=$((errs + $?))
 fi
 
-if [[ ! -d prepchem_NC.fd ]] ; then
-echo prepchem_NC.fd checkout ...
-    rm -f ${topdir}/checkout-prepchem_NC.fd.log
-    git clone -b develop https://github.com/NOAA-GSL/GSL-prep-chem  prepchem_NC.fd >> ${topdir}/checkout-prepchem_NC.fd.log 2>&1
-    cd ${topdir}
-else
-    echo 'Skip.  Directory prepchem_NC.fd already exists.'
+if [[ $checkout_prepchem  == "YES" ]]; then
+  checkout "prepchem_NC.fd" "https://github.com/NOAA-GSL/GSL-prep-chem.git" "a353a6e"; errs=$((errs + $?))
 fi
+
+#JKHif [[ ! -d prepchem_NC.fd ]] ; then
+#JKHecho prepchem_NC.fd checkout ...
+#JKH    rm -f ${topdir}/checkout-prepchem_NC.fd.log
+#JKH    git clone -b develop https://github.com/NOAA-GSL/GSL-prep-chem  prepchem_NC.fd >> ${topdir}/checkout-prepchem_NC.fd.log 2>&1
+#JKH    cd ${topdir}
+#JKHelse
+#JKH    echo 'Skip.  Directory prepchem_NC.fd already exists.'
+#JKHfi
 
 if [[ $checkout_gtg == "YES" ]]; then
   ################################################################################
