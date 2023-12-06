@@ -1,7 +1,9 @@
-#!/bin/sh 
+#! /usr/bin/env bash
 
-## this script makes a link to $ICSDIR/YYYYMMDDHH/gfs/<CASE>/INPUT
-##   /scratch4/BMC/rtfim/rtruns/FV3ICS/YYYYMMDDHH/gfs/C384|C768/INPUT
+source "$HOMEgfs/ush/preamble.sh"
+
+## this script makes a link to $ICSDIR/YYYYMMDDHH/gfs/<CASE>/<COMPONENT>/INPUT
+##   /scratch4/BMC/role.rtfim/rtruns/FV3ICS/YYYYMMDDHH/gfs/C384|C768/atmos/INPUT
 ##
 
 echo
