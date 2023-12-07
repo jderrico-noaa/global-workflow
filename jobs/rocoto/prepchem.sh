@@ -75,7 +75,6 @@ fi
  
 for n in $(seq 1 6); do
     tiledir=tile${n}
-    ## where does EMIYEAR get defined??
     eval $NLN $EMIINPUT/EMI_$EMIYEAR/$SMONTH/emi_data.tile${n}.nc .
     eval $NLN $EMIINPUT/EMI2/$SMONTH/emi2_data.tile${n}.nc .
     #eval $NLN $EMIINPUT/fengsha_2023/$SMONTH/dust_data.tile${n}.nc .
@@ -96,22 +95,30 @@ for n in $(seq 1 6); do
       emiss_date1="$SYEAR$SMONTH$SDAY" # default value for branch testing      
       echo "emiss_date: $emiss_date1"
       ## JKH  -  uncomment next 2 lines if not running FV3-CHEM prepchem task
-      # mkdir -p $BINGB/$emiss_date1
-      # $NCP ${PUBEMI}/*${emiss_date1}.*.bin ${BINGB}/$emiss_date1/
+      mkdir -p $BINGB/$emiss_date1
+      $NCP ${PUBEMI}/*${emiss_date1}.*.bin ${BINGB}/$emiss_date1/
     
       if [[ -f ${NCGB}/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc ]]; then
         echo "NetCDF GBBEPx File ${BINGB}/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."
       else
     
         if [ ${SYEAR} -eq 2016 -o ${emiss_date1} -ge 20230115 ];  then           ## JKH - change date
-          BC=GBBEPx.emis_BC.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-          OC=GBBEPx.emis_OC.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-          SO2=GBBEPx.emis_SO2.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-          FRP=GBBEPx.FRP.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-          if [ ${SYEAR} -eq 2016 ];  then          
-            PM25=GBBEPx.emis_PM25.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+          if [ ${emiss_date1} -ge 20230509 ];  then                              ## JKH - change date
+            BC=GBBEPxemis-BC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            OC=GBBEPxemis-OC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            SO2=GBBEPxemis-SO2-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            FRP=GBBEPxFRP-MeanFRP-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            PM25=GBBEPxemis-PM25-${CASE}GT${n}_v4r0_${emiss_date1}.bin
           else
-            PM25=GBBEPx.emis_PM2.5.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            BC=GBBEPx.emis_BC.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            OC=GBBEPx.emis_OC.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            SO2=GBBEPx.emis_SO2.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            FRP=GBBEPx.FRP.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            if [ ${SYEAR} -eq 2016 ];  then          
+              PM25=GBBEPx.emis_PM25.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            else
+              PM25=GBBEPx.emis_PM2.5.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            fi
           fi
         else
           BC=GBBEPx.bc.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
@@ -122,9 +129,6 @@ for n in $(seq 1 6); do
         fi
       
         mkdir -p $NCGB/${emiss_date1}
-        #JKH-li set -ue
-         #JKH-limodule load intel/19.0.5.281 netcdf szip hdf5
-         #JKH-liset -x
         $NLN $EXECgfs/mkncgbbepx .
  ./mkncgbbepx <<EOF
 &mkncgbbepx
@@ -173,12 +177,24 @@ EOF
         echo "NetCDF GBBEPx File $DIRGB/${SYEAR}${nmonth}${nday}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."
       else
 
-        if [ ${SYEAR} -eq 2016 ];  then
-          BC=GBBEPx.emis_BC.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
-          OC=GBBEPx.emis_OC.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
-          PM25=GBBEPx.emis_PM25.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
-          SO2=GBBEPx.emis_SO2.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
-          FRP=GBBEPx.FRP.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+        if [ ${SYEAR} -eq 2016 -o ${emiss_date1} -ge 20230115 ];  then           ## JKH - change date
+          if [ ${emiss_date1} -ge 20230509 ];  then                              ## JKH - change date
+            BC=GBBEPxemis-BC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            OC=GBBEPxemis-OC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            SO2=GBBEPxemis-SO2-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            FRP=GBBEPxFRP-MeanFRP-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            PM25=GBBEPxemis-PM25-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+          else
+            BC=GBBEPx.emis_BC.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+            OC=GBBEPx.emis_OC.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+            if [ ${SYEAR} -eq 2016 ];  then          
+              PM25=GBBEPx.emis_PM25.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            else
+              PM25=GBBEPx.emis_PM2.5.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            fi
+            SO2=GBBEPx.emis_SO2.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+            FRP=GBBEPx.FRP.003.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
+          fi
         else
           BC=GBBEPx.bc.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
           OC=GBBEPx.oc.${SYEAR}${nmonth}${nday}.FV3.${CASE}Grid.tile${n}.bin
@@ -188,9 +204,9 @@ EOF
         fi
 
         mkdir -p $NCGB/${SYEAR}${nmonth}${nday}
-        set -ue
-        module load intel/19.0.5.281 netcdf szip hdf5
-        set -x
+        #JKH-liset -ue
+        #JKH-limodule load intel/19.0.5.281 netcdf szip hdf5
+        #JKH-liset -x
         $NLN $EXECgfs/mkncgbbepx .
  ./mkncgbbepx <<EOF
 &mkncgbbepx
