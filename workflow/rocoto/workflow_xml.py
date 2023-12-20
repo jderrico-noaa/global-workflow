@@ -62,6 +62,16 @@ class RocotoXML:
         entity['ROTDIR'] = self._base['ROTDIR']
         entity['JOBS_DIR'] = self._base['BASE_JOB']
 
+        entity['RUNDIR'] = '&ROTDIR;/../RUNDIRS/&PSLOT;'
+        entity['PUBEMI'] = '/scratch2/BMC/public/data/grids/nesdis/GBBEPx/&CASE;'
+        entity['EMIINPUT'] = '/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_&CASE;'
+        entity['BINGB'] = '/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx'
+        entity['NCGB'] = '&EMIINPUT;/GBBEPx'
+        entity['ARCEMI'] = '/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/GBBEPx'
+        entity['CDUMP'] = 'gfs'
+        entity['CASE'] = 'C384'
+        entity['COMPONENT'] = 'atmos'
+        entity['NATIVE_STR'] = '--export=NONE'
         entity['MAXTRIES'] = self._base.get('ROCOTO_MAXTRIES', 2)
 
         # Put them all in an XML key-value syntax

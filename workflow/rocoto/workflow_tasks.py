@@ -16,6 +16,7 @@ class Tasks:
                    'earc', 'ecen', 'echgres', 'ediag', 'efcs',
                    'eobs', 'eomg', 'epos', 'esfc', 'eupd',
                    'atmensanalprep', 'atmensanalrun', 'atmensanalpost',
+                   'regrid', 'prepchem', 'calcinc', 
                    'fcst', 'post', 'ocnpost', 'vrfy', 'metp',
                    'postsnd', 'awips', 'gempak',
                    'wafs', 'wafsblending', 'wafsblending0p25',
@@ -37,6 +38,7 @@ class Tasks:
         envar_dict = {'RUN_ENVIR': self._base.get('RUN_ENVIR', 'emc'),
                       'HOMEgfs': self._base.get('HOMEgfs'),
                       'EXPDIR': self._base.get('EXPDIR'),
+                      'ROTDIR': self._base.get('ROTDIR'),
                       'CDUMP': self.cdump,
                       'CDATE': '<cyclestr>@Y@m@d@H</cyclestr>',
                       'PDY': '<cyclestr>@Y@m@d</cyclestr>',
@@ -97,7 +99,7 @@ class Tasks:
 
         memory = task_config.get(f'memory_{task_name}', None)
 
-        native = '--export=NONE' if scheduler in ['slurm'] else None
+        native = '&NATIVE_STR;' if scheduler in ['slurm'] else None
 
         queue = task_config['QUEUE']
         if task_name in Tasks.SERVICE_TASKS and scheduler not in ['slurm']:
@@ -619,8 +621,8 @@ class Tasks:
 
         postenvars = self.envars.copy()
         postenvar_dict = {'FHRGRP': '#grp#',
-                          'FHRLST': '#lst#',
-                          'ROTDIR': self._base.get('ROTDIR')}
+                          'FHRLST': '#lst#'}
+#JKH                          'ROTDIR': self._base.get('ROTDIR')}
         for key, value in postenvar_dict.items():
             postenvars.append(rocoto.create_envar(name=key, value=str(value)))
 
