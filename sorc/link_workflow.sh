@@ -96,6 +96,7 @@ cd ${pwd}/../parm/post          ||exit 8
     for file in postxconfig-NT-GEFS-ANL.txt postxconfig-NT-GEFS-F00.txt postxconfig-NT-GEFS.txt postxconfig-NT-GFS-ANL.txt \
         postxconfig-NT-GFS-F00-TWO.txt postxconfig-NT-GFS-F00.txt postxconfig-NT-GFS-FLUX-F00.txt postxconfig-NT-GFS-FLUX.txt \
         postxconfig-NT-GFS-GOES.txt postxconfig-NT-GFS-TWO.txt postxconfig-NT-GFS-WAFS-ANL.txt postxconfig-NT-GFS-WAFS.txt \
+        postxconfig-NT-CCPP-CHEM.txt postxconfig-NT-CCPP-CHEM-F00.txt postxconfig-NT-CCPP-CHEM-MET.txt \
         postxconfig-NT-GFS.txt postxconfig-NT-gefs-aerosol.txt postxconfig-NT-gefs-chem.txt params_grib2_tbl_new \
         post_tag_gfs128 post_tag_gfs65 gtg.config.gfs gtg_imprintings.txt nam_micro_lookup.dat \
         AEROSOL_LUTS.dat optics_luts_DUST.dat optics_luts_SALT.dat optics_luts_SOOT.dat optics_luts_SUSO.dat optics_luts_WASO.dat \
@@ -238,6 +239,9 @@ $LINK ../sorc/ufs_model.fd/tests/ufs_model.x .
 
 [[ -s gfs_ncep_post ]] && rm -f gfs_ncep_post
 $LINK ../sorc/upp.fd/exec/upp.x gfs_ncep_post
+
+[[ -s mkncgbbepx ]] && rm -f mkncgbbepx
+$LINK ../sorc/prepchem_NC.fd/process-obs/FV3/gbbepx2netcdf/mkncgbbepx.exe mkncgbbepx
 
 if [ -d ${pwd}/gfs_wafs.fd ]; then
     for wafsexe in \

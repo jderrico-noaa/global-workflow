@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+########## config.regrid ##########
+# REGRID specific configuration
+
+echo "BEGIN: config.regrid"
+
+# Get task specific resources
+. $EXPDIR/config.resources regrid
+
+# Set regrid variables 
+export job=${CDUMP}_regrid_${cyc}
+export DATA="$RUNDIR/$CDATE/$CDUMP"
+export INPUTDIR="/scratch1/BMC/gfs-fv3-dev/lzhang/EMC_FV3/ICs"
+
+echo "END: config.regrid"

@@ -26,7 +26,7 @@ status=$?
 
 ###############################################################
 # Source relevant configs
-configs="base prepchem"
+configs="base fcst prepchem"
 for config in $configs; do
     . $EXPDIR/config.${config}
     status=$?
@@ -96,7 +96,7 @@ for n in $(seq 1 6); do
       echo "emiss_date: $emiss_date1"
       ## JKH  -  uncomment next 2 lines if not running FV3-CHEM prepchem task
       mkdir -p $BINGB/$emiss_date1
-      $NCP ${PUBEMI}/*${emiss_date1}.*.bin ${BINGB}/$emiss_date1/
+      $NCP ${PUBEMI}/*${emiss_date1}.bin ${BINGB}/$emiss_date1/
     
       if [[ -f ${NCGB}/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc ]]; then
         echo "NetCDF GBBEPx File ${BINGB}/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."

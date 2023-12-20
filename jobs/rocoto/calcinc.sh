@@ -55,6 +55,7 @@ if [ $DO_CALC_INCREMENT = "YES" ]; then
 
   [[ ! -d $DATA ]] && mkdir -p $DATA
   cd $DATA
+  if [[ ! -d regrid ]]; then ln -sf $RUNDIR1/$CDATE/$CDUMP/regrid regrid; fi   #lzhang
   mkdir -p calcinc
   cd calcinc
 
