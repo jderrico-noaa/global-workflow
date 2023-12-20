@@ -44,16 +44,9 @@ fi
 
 #---------------------------------------------------------------
 
-  if [ $INLINE_POST = ".false." ]; then
-    $WGRIB2 $PGBOUT $option1 $option21 $option22 $option23 $option24 \
-                          $option25 $option26 $option27 $option28 \
-                          -new_grid $grid1p0  fluxfile_${fhr3}_1p00
-  else 
-    $WGRIB2 $COMOUT/${FLUXFL} $option1 $option21 $option22 $option23 $option24 \
-                          $option25 $option26 $option27 $option28 \
-                          -new_grid $grid1p0  fluxfile_${fhr3}_1p00
-  fi
-  export err=$?; err_chk
+  $WGRIB2 $COMOUT/${FLUXFL} $option1 $option21 $option22 $option23 $option24 \
+                            $option25 $option26 $option27 $option28 \
+                            -new_grid $grid1p0  fluxfile_${fhr3}_1p00
 
 
   $WGRIB2 -s fluxfile_${fhr3}_1p00 > $COMOUT/${PREFIX}flux.1p00.f${fhr3}.idx
