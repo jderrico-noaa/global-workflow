@@ -313,9 +313,11 @@ EOF
   if [ $WRITE_DOPOST = ".true." ]; then
     $NLN $PARM_POST/post_tag_gfs${LEVS}              $DATA/itag
     #$NLN $PARM_POST/postxconfig-NT-GFS-TWO.txt      $DATA/postxconfig-NT.txt
-    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM.txt     $DATA/postxconfig-NT.txt
+    #JKH$NLN $PARM_POST/postxconfig-NT-CCPP-CHEM.txt     $DATA/postxconfig-NT.txt
+    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM-MET.txt     $DATA/postxconfig-NT.txt    ## JKH
     #$NLN $PARM_POST/postxconfig-NT-GFS-F00-TWO.txt  $DATA/postxconfig-NT_FH00.txt
-    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM.txt     $DATA/postxconfig-NT_FH00.txt
+    #JKH$NLN $PARM_POST/postxconfig-NT-CCPP-CHEM.txt     $DATA/postxconfig-NT_FH00.txt
+    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM-MET.txt     $DATA/postxconfig-NT_FH00.txt    ## JKH
     $NLN $PARM_POST/params_grib2_tbl_new             $DATA/params_grib2_tbl_new
     $NLN $PARM_POST/optics_luts_*.dat                $DATA/.
 fi
