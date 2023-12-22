@@ -101,7 +101,7 @@ export SDATE=@SDATE@
 export FDATE=@FDATE@
 export EDATE=@EDATE@
 export EXP_WARM_START="@EXP_WARM_START@"
-export assim_freq=6
+export assim_freq=24                              ## JKH
 export PSLOT="@PSLOT@"
 export EXPDIR="@EXPDIR@/$PSLOT"
 export ROTDIR="@ROTDIR@/$PSLOT"
@@ -298,12 +298,12 @@ else
 fi
 
 # IAU related parameters
-export DOIAU="YES"        # Enable 4DIAU for control with 3 increments
+export DOIAU="NO"        # Enable 4DIAU for control with 3 increments        ## JKH
 export IAUFHRS="3,6,9"
 export IAU_FHROT=$(echo $IAUFHRS | cut -c1)
 export IAU_DELTHRS=6
 export IAU_OFFSET=6
-export DOIAU_ENKF=${DOIAU:-"YES"}   # Enable 4DIAU for EnKF ensemble
+export DOIAU_ENKF=${DOIAU:-"NO"}   # Enable 4DIAU for EnKF ensemble         ## JKH
 export IAUFHRS_ENKF="3,6,9"
 export IAU_DELTHRS_ENKF=6
 # Check if cycle is cold starting, DOIAU off, or free-forecast mode

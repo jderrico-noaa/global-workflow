@@ -19,7 +19,7 @@ FV3_GFS_det(){
   res_latlon_dynamics="''"
 
   # Determine if this is a warm start or cold start
-  if [ -f $gmemdir/RESTART/${sPDY}.${scyc}0000.coupler.res ]; then
+  if [ -f $gmemdir/RERUN_RESTART/${sPDY}.${scyc}0000.coupler.res ]; then            ## JKH
     export warm_start=".true."
   fi
 

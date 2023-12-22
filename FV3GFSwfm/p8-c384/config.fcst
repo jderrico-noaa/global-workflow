@@ -173,8 +173,11 @@ tbf=""
 if [ $satmedmf = ".true." ]; then tbf="_satmedmf" ; fi
 
 # Radiation options 
-export IAER=1011    ; #spectral band mapping method for aerosol optical properties from MERRA-2 data
-#export IAER=2011    ; #spectral band mapping method for aerosol optical properties from online chemial model
+if [[ $CCPP_SUITE = "FV3_GFS_v17_p8_gsd_chem" ]] || [[ $CCPP_SUITE = "FV3_GFS_v17_coupled_p8_gsd_chem" ]] ; then 
+  export IAER=2011    ; #spectral band mapping method for aerosol optical properties from online chemical model
+else
+  export IAER=1011    ; #spectral band mapping method for aerosol optical properties from MERRA-2 data
+fi
 export iovr_lw=3    ; #de-correlation length cloud overlap method (Barker, 2008) 
 export iovr_sw=3    ; #de-correlation length cloud overlap method (Barker, 2008) 
 export iovr=3       ; #de-correlation length cloud overlap method (Barker, 2008) 

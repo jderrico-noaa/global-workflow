@@ -47,7 +47,7 @@ FV3_GFS_postdet(){
       #.............................
 
       # Link all (except sfc_data) restart files from $gmemdir
-      for file in $(ls $gmemdir/RESTART/${sPDY}.${scyc}0000.*.nc); do
+      for file in $(ls $gmemdir/RERUN_RESTART/${sPDY}.${scyc}0000.*.nc); do       ## JKH
         file2=$(echo $(basename $file))
         file2=$(echo $file2 | cut -d. -f3-) # remove the date from file
         fsuf=$(echo $file2 | cut -d. -f1)
@@ -57,7 +57,7 @@ FV3_GFS_postdet(){
       done
 
       # Link sfcanl_data restart files from $memdir
-      for file in $(ls $memdir/RESTART/${sPDY}.${scyc}0000.*.nc); do
+      for file in $(ls $memdir/RERUN_RESTART/${sPDY}.${scyc}0000.*.nc); do        ## JKH
         file2=$(echo $(basename $file))
         file2=$(echo $file2 | cut -d. -f3-) # remove the date from file
         fsufanl=$(echo $file2 | cut -d. -f1)
@@ -66,6 +66,10 @@ FV3_GFS_postdet(){
           $NLN $file $DATA/INPUT/$file2
         fi
       done
+
+      #JKH cp atminc.nc to output dir
+      cd $DATA
+      $NCP ../calcinc/atminc.nc $memdir/${CDUMP}.t${cyc}z.atminc.nc
 
       # Need a coupler.res when doing IAU
       if [ $DOIAU = "YES" ]; then
@@ -104,6 +108,15 @@ EOF
           res_latlon_dynamics="fv3_increment.nc"
         fi
       fi
+
+    # Link sfc data from GFS initial conditions     ## JKH
+    for file in $memdir/INPUT/*.nc; do
+      file2=$(echo $(basename $file))
+      fsuf=$(echo $file2 | cut -c1-3)
+      if [ $fsuf = "sfc" ]; then
+        $NLN $file $DATA/INPUT/$file2
+      fi
+    done                                            ## JKH
 
     #.............................
     else  ##RERUN
@@ -312,15 +325,18 @@ EOF
   # inline post fix files
   if [ $WRITE_DOPOST = ".true." ]; then
     $NLN $PARM_POST/post_tag_gfs${LEVS}              $DATA/itag
-    #$NLN $PARM_POST/postxconfig-NT-GFS-TWO.txt      $DATA/postxconfig-NT.txt
-    #JKH$NLN $PARM_POST/postxconfig-NT-CCPP-CHEM.txt     $DATA/postxconfig-NT.txt
-    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM-MET.txt     $DATA/postxconfig-NT.txt    ## JKH
-    #$NLN $PARM_POST/postxconfig-NT-GFS-F00-TWO.txt  $DATA/postxconfig-NT_FH00.txt
-    #JKH$NLN $PARM_POST/postxconfig-NT-CCPP-CHEM.txt     $DATA/postxconfig-NT_FH00.txt
-    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM-MET.txt     $DATA/postxconfig-NT_FH00.txt    ## JKH
+    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM-MET.txt $DATA/postxconfig-NT.txt         ## JKH
+    $NLN $PARM_POST/postxconfig-NT-CCPP-CHEM-MET.txt $DATA/postxconfig-NT_FH00.txt    ## JKH
     $NLN $PARM_POST/params_grib2_tbl_new             $DATA/params_grib2_tbl_new
     $NLN $PARM_POST/optics_luts_*.dat                $DATA/.
-fi
+  fi
+
+  #link GSDChem input files   ## JKH
+  if [ $DO_GChem = "YES" ]; then
+    for file in $(ls $DATA/../prep/*.nc) ; do
+      $NLN $file $DATA/INPUT/$(echo $(basename $file))
+    done
+  fi                          ## JKH
 
   #------------------------------------------------------------------
   # changeable parameters
@@ -585,14 +601,14 @@ data_out_GFS() {
     # Copy model restart files
     if [ $CDUMP = "gdas" -a $rst_invt1 -gt 0 ]; then
       cd $DATA/RESTART
-      mkdir -p $memdir/RESTART
+      mkdir -p $memdir/RERUN_RESTART              ## JKH
       for rst_int in $restart_interval ; do
         if [ $rst_int -ge 0 ]; then
           RDATE=$($NDATE +$rst_int $CDATE)
           rPDY=$(echo $RDATE | cut -c1-8)
           rcyc=$(echo $RDATE | cut -c9-10)
           for file in $(ls ${rPDY}.${rcyc}0000.*) ; do
-            $NCP $file $memdir/RESTART/$file
+            $NCP $file $memdir/RERUN_RESTART/$file      ## JKH
           done
         fi
       done
@@ -606,7 +622,7 @@ data_out_GFS() {
         rPDY=$(echo $RDATE | cut -c1-8)
         rcyc=$(echo $RDATE | cut -c9-10)
         for file in $(ls ${rPDY}.${rcyc}0000.*) ; do
-          $NCP $file $memdir/RESTART/$file
+          $NCP $file $memdir/RERUN_RESTART/$file        ## JKH
         done
       fi
     elif [ $CDUMP = "gfs" ]; then

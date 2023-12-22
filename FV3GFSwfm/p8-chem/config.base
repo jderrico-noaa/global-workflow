@@ -101,7 +101,7 @@ export SDATE=2023112100
 export FDATE=@FDATE@
 export EDATE=2023112100
 export EXP_WARM_START=".false."
-export assim_freq=6
+export assim_freq=24                              ## JKH
 export PSLOT="p8-chem"
 export EXPDIR="/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/$PSLOT"
 export ROTDIR="/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/$PSLOT"
@@ -303,12 +303,12 @@ else
 fi
 
 # IAU related parameters
-export DOIAU="YES"        # Enable 4DIAU for control with 3 increments
+export DOIAU="NO"        # Enable 4DIAU for control with 3 increments        ## JKH
 export IAUFHRS="3,6,9"
 export IAU_FHROT=$(echo $IAUFHRS | cut -c1)
 export IAU_DELTHRS=6
 export IAU_OFFSET=6
-export DOIAU_ENKF=${DOIAU:-"YES"}   # Enable 4DIAU for EnKF ensemble
+export DOIAU_ENKF=${DOIAU:-"NO"}   # Enable 4DIAU for EnKF ensemble         ## JKH
 export IAUFHRS_ENKF="3,6,9"
 export IAU_DELTHRS_ENKF=6
 # Check if cycle is cold starting, DOIAU off, or free-forecast mode
