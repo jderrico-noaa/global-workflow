@@ -11,7 +11,7 @@ CCPP_SUITES="FV3_GFS_v16,FV3_GFS_v16_ugwpv1,FV3_GFS_v17_p8,FV3_GFS_v16_coupled_n
 
 while getopts ":da:v" option; do
   case "${option}" in
-    d) BUILD_TYPE="Debug";;
+    d) BUILD_TYPE="DEBUG";;
     a) APP="${OPTARG}" ;;
     v) BUILD_VERBOSE="YES";;
     \?)

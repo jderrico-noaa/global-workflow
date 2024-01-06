@@ -42,7 +42,7 @@
 	<log verbosity="10"><cyclestr>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem/logs/@Y@m@d@H.log</cyclestr></log>
 
 	<!-- Define the cycles -->
-	<cycledef group="gfs">202312030000 202312040000 24:00:00</cycledef>
+	<cycledef group="gfs">202312210000 202312220000 24:00:00</cycledef>
 
 <!--
 <task name="gfsgetic" cycledefs="gfs" maxtries="&MAXTRIES;">
@@ -70,8 +70,8 @@
 
 	<dependency>
 		<nor>
-			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
-			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/RERUN_RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
 		</nor>
 	</dependency>
 
@@ -108,7 +108,7 @@
 				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/gfs.t@Hz.atmanl.nemsio</cyclestr></datadep>
 				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/gfs.t@Hz.atmanl.nc</cyclestr></datadep>
 				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.atmanl.nc</cyclestr></datadep>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
+				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/RERUN_RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
 			</or>
 			<taskdep task="gfsgetic"/>
 		</and>
@@ -245,11 +245,13 @@
 
 	<jobname><cyclestr>&PSLOT;_gfsfcst_@H</cyclestr></jobname>
 	<account>gsd-fv3</account>
-	<queue>batch</queue> 
+<!--	<queue>batch</queue> --> 
+	<queue>debug</queue> 
 	<partition>hera</partition>
-	<walltime>02:00:00</walltime> 
-	<nodes>33:ppn=20:tpp=2</nodes>
-<!--	<nodes>17:ppn=40:tpp=1</nodes> -->
+<!--	<walltime>02:40:00</walltime> --> 
+	<walltime>00:30:00</walltime> 
+	<nodes>62:ppn=20:tpp=2</nodes>      <!--16x12, 2/40 -->
+<!--	<nodes>33:ppn=20:tpp=2</nodes>  -->     <!-- 8x12, 2/40 -->
 	<native>&NATIVE_STR;</native>
 
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsfcst.log</cyclestr></join>
@@ -284,9 +286,9 @@
 	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
 	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
 -->
-	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 </var>
-	<var name="dep">f000 f006 f012 f018 f024 </var>
-	<var name="lst">f000 f006 f012 f018 f024 </var>
+	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048</var>
+	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 </var>
+	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 </var>
 
 	<task name="gfspost#grp#" cycledefs="gfs" maxtries="&MAXTRIES;">
 

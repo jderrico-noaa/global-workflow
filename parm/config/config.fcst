@@ -338,7 +338,8 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
     # Write gfs restart files to rerun fcst from any break point         
     export restart_interval_gfs=${restart_interval_gfs:-0}
     if [ $restart_interval_gfs -le 0 ]; then
-        export restart_interval="$FHMAX_GFS"
+        #JKHexport restart_interval="$FHMAX_GFS"
+        export restart_interval=24                          ## JKH
     else
         rst_list=""
         IAU_OFFSET=${IAU_OFFSET:-0}

@@ -78,7 +78,7 @@ def create_task(task_dict: Dict[str, Any]) -> List[str]:
     threads = resources_dict.get('threads', 1)
     log = task_dict.get('log', 'demo.log')
     envar = task_dict.get('envars', None)
-    dependency = task_dict.get('dependency', None)
+    dependency = task_dict.get('dependency', [])
 
     str_maxtries = str(maxtries)
     str_final = ' final="true"' if final else ''
@@ -109,7 +109,7 @@ def create_task(task_dict: Dict[str, Any]) -> List[str]:
             strings.append(f'\t{e}\n')
         strings.append('\n')
 
-    if dependency is not None:
+    if dependency is not None and len(dependency) > 0:
         strings.append('\t<dependency>\n')
         for d in dependency:
             strings.append(f'\t\t{d}\n')
@@ -191,6 +191,7 @@ def _add_data_tag(dep_dict: Dict[str, Any]) -> str:
     dep_type = dep_dict.get('type', None)
     dep_data = dep_dict.get('data', None)
     dep_offset = dep_dict.get('offset', None)
+    dep_age = dep_dict.get('age', None)
 
     if dep_data is None:
         msg = f'a data value is necessary for {dep_type} dependency'
@@ -204,7 +205,10 @@ def _add_data_tag(dep_dict: Dict[str, Any]) -> str:
 
     assert len(dep_data) == len(dep_offset)
 
-    strings = ['<datadep>']
+    if dep_age is None:
+        strings = ['<datadep>']
+    else:
+        strings = [f'<datadep age="{dep_age}">']
     for data, offset in zip(dep_data, dep_offset):
         if '@' in data:
             offset_str = '' if offset in [None, ''] else f' offset="{offset}"'
@@ -260,13 +264,22 @@ def _add_streq_tag(dep_dict: Dict[str, Any]) -> str:
     if dep_left is None:
         msg += f'a left value is necessary for {dep_type} dependency'
         fail = True
+    else:
+        dep_left = str(dep_left)
     if dep_right is None:
         if fail:
             msg += '\n'
         msg += f'a right value is necessary for {dep_type} dependency'
         fail = True
+    else:
+        dep_right = str(dep_right)
     if fail:
         raise KeyError(msg)
+
+    if '@' in dep_left:
+        dep_left = f'<cyclestr>{dep_left}</cyclestr>'
+    if '@' in dep_right:
+        dep_right = f'<cyclestr>{dep_right}</cyclestr>'
 
     string = f'<{dep_type}><left>{dep_left}</left><right>{dep_right}</right></{dep_type}>'
 
@@ -293,7 +306,7 @@ def _traverse(o, tree_types=(list, tuple)):
         yield o
 
 
-def create_dependency(dep_condition=None, dep=None) -> List[str]:
+def create_dependency(dep_condition=None, dep=[]) -> List[str]:
     """
     create a compound dependency given a list of dependencies, and compounding condition
     the list of dependencies are created using add_dependency
@@ -309,10 +322,10 @@ def create_dependency(dep_condition=None, dep=None) -> List[str]:
 
     strings = []
 
-    if dep_condition is not None:
-        strings.append(f'<{dep_condition}>')
+    if len(dep) > 0:
+        if dep_condition is not None:
+            strings.append(f'<{dep_condition}>')
 
-    if dep[0] is not None:
         for d in dep:
             if dep_condition is None:
                 strings.append(f'{d}')
@@ -320,8 +333,8 @@ def create_dependency(dep_condition=None, dep=None) -> List[str]:
                 for e in _traverse(d):
                     strings.append(f'\t{e}')
 
-    if dep_condition is not None:
-        strings.append(f'</{dep_condition}>')
+        if dep_condition is not None:
+            strings.append(f'</{dep_condition}>')
 
     return strings
 

@@ -369,13 +369,11 @@ cat >> input.nml <<EOF
   rrtmgp_nBandsSW    = ${rrtmgp_nBandsSW:-"14"}
   doGP_cldoptics_LUT = ${doGP_cldoptics_LUT:-".false."}
   doGP_lwscat        = ${doGP_lwscat:-".false."}
+  fscav_aero         = ${fscav_aero:-'*:0.0'}
 EOF
 
-if [ $cplchm = .true. ] || [ $cplchp = .true. ]; then
-  cat >> input.nml << EOF
-  fscav_aero = ${fscav_aero:-'*:0.0'}
-EOF
-fi
+## JKH
+## always include fscav_aero   (for C384)
 
 if [ $cplchp = .true. ]; then
   cat >> input.nml << EOF
