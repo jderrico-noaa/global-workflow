@@ -67,6 +67,10 @@ FV3_GFS_postdet(){
         fi
       done
 
+      #JKH cp atminc.nc to output dir
+      cd $DATA
+      $NCP ../calcinc/atminc.nc $memdir/${CDUMP}.t${cyc}z.atminc.nc
+
       # Need a coupler.res when doing IAU
       if [ $DOIAU = "YES" ]; then
         rm -f $DATA/INPUT/coupler.res
