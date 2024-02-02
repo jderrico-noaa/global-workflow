@@ -102,8 +102,11 @@ if [ $type = "gfs" ]; then
     echo  "${dirname}${head}prepbufr                         " >>gfsa.txt
     echo  "${dirname}${head}prepbufr.acft_profiles           " >>gfsa.txt
   fi
-  echo  "${dirname}${head}pgrb2.0p25.anl                   " >>gfsa.txt
-  echo  "${dirname}${head}pgrb2.0p25.anl.idx               " >>gfsa.txt
+  ## JKH
+  if [ -s $ROTDIR/${dirpath}${head}pgrb2.0p25.anl ]; then
+    echo  "${dirname}${head}pgrb2.0p25.anl                   " >>gfsa.txt
+    echo  "${dirname}${head}pgrb2.0p25.anl.idx               " >>gfsa.txt
+  fi
   #Only generated if there are cyclones to track
   cyclone_files=(avno.t${cyc}z.cyclone.trackatcfunix
                  avnop.t${cyc}z.cyclone.trackatcfunix
@@ -136,11 +139,13 @@ if [ $type = "gfs" ]; then
    fi
   fi
 
-  echo  "${dirname}${head}pgrb2.0p50.anl                   " >>gfsb.txt
-  echo  "${dirname}${head}pgrb2.0p50.anl.idx               " >>gfsb.txt
-  echo  "${dirname}${head}pgrb2.1p00.anl                   " >>gfsb.txt
-  echo  "${dirname}${head}pgrb2.1p00.anl.idx               " >>gfsb.txt
-
+  ## JKH
+  if [ -s $ROTDIR/${dirpath}${head}pgrb2.0p50.anl ]; then
+    echo  "${dirname}${head}pgrb2.0p50.anl                   " >>gfsb.txt
+    echo  "${dirname}${head}pgrb2.0p50.anl.idx               " >>gfsb.txt
+    echo  "${dirname}${head}pgrb2.1p00.anl                   " >>gfsb.txt
+    echo  "${dirname}${head}pgrb2.1p00.anl.idx               " >>gfsb.txt
+  fi 
 
   fh=0
   while [ $fh -le $FHMAX_GFS ]; do
