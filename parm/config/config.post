@@ -27,13 +27,14 @@ export GFSDWNSH="$HOMEpost/ush/fv3gfs_dwn_nems.sh"
 export POSTGPSH="$HOMEpost/ush/gfs_nceppost.sh"
 export POSTGPEXEC="$HOMEpost/exec/gfs_ncep_post"
 export GOESF=NO                              # goes image
-export FLXF=YES                               # grib2 flux file written by post
+export FLXF=NO                               # grib2 flux file written by post       ## JKH
 
 export npe_postgp=$npe_post
 export nth_postgp=1
 
 export GFS_DOWNSTREAM="YES"
-export downset=2
+#JKHexport downset=2                ## create pgrb2b grib2 files
+export downset=1                    ## JKH 
 export npe_dwn=24
 
 export GRIBVERSION='grib2'
