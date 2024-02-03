@@ -397,8 +397,6 @@ if [ $DO_AERO = "YES" ]; then # temporary settings for aerosol coupling
     export dnats_aero="${aero_diag_tracers:-0}"
 fi
 
-# set fscav_aero for p8-c384
-export fscav_aero="'*:0.2','so2:0.2','msa:0.1','dms:0.1','sulf:0.9','bc1:0.3','bc2:0.3','oc1:0.2','oc2:0.3','seas1:0.6','seas2:0.6','seas3:0.6','seas4:0.6','seas5:0.6','dust1:0.55','dust2:0.55','dust3:0.55','dust4:0.55','dust5:0.55'"
 if [ $DO_GChem = "YES" ]; then # temporary settings for aerosol coupling
     export AERO_DIAG_TABLE="${AERO_DIAG_TABLE:-$HOMEgfs/parm/parm_fv3diag/diag_table.gchem}"
     export AERO_FIELD_TABLE="${AERO_FIELD_TABLE:-$HOMEgfs/parm/parm_fv3diag/field_table.gchem}"

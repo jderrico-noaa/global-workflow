@@ -1,0 +1,5 @@
+
+
+rocotorun -w p8-chem.xml -d p8-chem.db
+rocotostat -w p8-chem.xml -d p8-chem.db
+

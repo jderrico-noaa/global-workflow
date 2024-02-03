@@ -1,0 +1,23 @@
+ 01/23
+
+  since 01/01 and 01/02 data are already purged from /public GBBEPx directory, mv
+     /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem_regrid-calcinc/FV3GFSrun/RUNDIRS/p8-chem/2024010[12]00/gfs/prep to
+     /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/FV3GFSrun/RUNDIRS/p8-chem/2024010[12]00/gfs/prep 
+
+   rocotocomplete prepchem tasks for 01/01 and 01/02
+
+   8x12, 2th, 2wg/40wt ==> 33 nodes
+
+     * gfsfcst ran out of walltime even though set to 1h40m
+       -- don't know why it's running so slow....
+
+ 01/24
+   try 16x16, 2th, 2wg/40wt ==> 62 nodes
+
+   change IAER=1011 in config.fcst temporarily so Li can compare output to C384 run
+
+     ** Li looked at data and reported results look good. Can go ahead and start in realtime
+
+ 02/02 
+   change back to IAER=2011 in config.fcst
+

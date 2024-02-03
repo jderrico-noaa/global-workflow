@@ -5,8 +5,8 @@ EXPDIR=$GITDIR/FV3GFSwfm                                         ## default EXPD
 ICSDIR=$COMROT/FV3ICS
 
 PSLOT=p8-c384
-IDATE=2023112100
-EDATE=2023112100
+IDATE=2024010100
+EDATE=2024010100
 RESDET=384
 
 ### gfs_cyc 1  00Z only;  gfs_cyc 2  00Z and 12Z

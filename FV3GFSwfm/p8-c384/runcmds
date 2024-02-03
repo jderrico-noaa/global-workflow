@@ -1,0 +1,5 @@
+
+
+rocotorun -w p8-c384.xml -d p8-c384.db
+rocotostat -w p8-c384.xml -d p8-c384.db
+

@@ -159,7 +159,6 @@ export DO_OCN="NO"
 export DO_ICE="NO"
 export DO_AERO="NO"
 export DO_GChem="NO"
-#export CCPP_SUITE="FV3_GFS_v16_gsd_chem"
 export CCPP_SUITE="FV3_GFS_v17_p8_gsd_chem"
 #export CCPP_SUITE="FV3_GFS_v17_p8"
 export WAVE_CDUMP="" # When to include wave suite: gdas, gfs, or both
