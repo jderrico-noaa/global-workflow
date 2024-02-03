@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<!DOCTYPE workflow
+[
+	<!--
+	PROGRAM
+		Main workflow manager for Global Forecast System
+
+	NOTES:
+		This workflow was automatically generated at 2024-01-24 00:05:12.456714
+	-->
+
+	<!ENTITY PSLOT "p8-chem">
+	<!ENTITY CDUMP "gfs">
+	<!ENTITY CASE "C384">
+        <!ENTITY HOMEgfs "/scratch2/BMC/gsd-fv3-dev/jhender/test/&PSLOT;">
+        <!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
+	<!ENTITY EXPDIR "&HOMEgfs;/FV3GFSwfm/&PSLOT;">
+	<!ENTITY ROTDIR "&HOMEgfs;/FV3GFSrun/&PSLOT;">
+	<!ENTITY ICSDIR "&HOMEgfs;/FV3GFSrun/FV3ICS">
+
+	<!-- use RUNDIR1 as long as FV3-CHEM is still running in realtime   -->
+	<!ENTITY RUNDIR1 "/scratch1/BMC/gsd-fv3/NCEPDEV/stmp3/role.rtfim/RUNDIRS/rt_fv3gfs_chem">
+	<!ENTITY RUNDIR "&ROTDIR;/../RUNDIRS/&PSLOT;">
+
+	<!ENTITY PUBEMI "/scratch2/BMC/public/data/grids/nesdis/GBBEPx/&CASE;">
+	<!-- use lzhang GBBEPx directory as long as FV3-CHEM is still running in realtime 
+	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx">-->
+
+	<!ENTITY BINGB "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/GBBEPx">
+	<!ENTITY BINGB "/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx">
+        <!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/emi_&CASE;">
+	<!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_&CASE;">
+	<!ENTITY NCGB "&EMIINPUT;/GBBEPx">
+	<!ENTITY ARCEMI "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/GBBEPx">
+
+	<!ENTITY NATIVE_STR "--export=NONE">
+	<!ENTITY MAXTRIES "2">
+]>
+
+<workflow realtime="F" scheduler="slurm" cyclethrottle="3" taskthrottle="25">
+
+	<log verbosity="10"><cyclestr>&EXPDIR;/logs/@Y@m@d@H.log</cyclestr></log>
+
+	<!-- Define the cycles -->
+	<cycledef group="gfs">202401010000 202401020000 24:00:00</cycledef>
+
+     <task name="gfscopyic" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+	<command>&JOBS_DIR;/copyics.sh</command>
+
+	<jobname><cyclestr>&PSLOT;_gfscopyic_@H</cyclestr></jobname>
+	<account>gsd-fv3</account>
+	<partition>hera</partition>
+	<queue>batch</queue>
+	<walltime>00:30:00</walltime>
+	<nodes>1:ppn=1:tpp=1</nodes>
+	<native>&NATIVE_STR;</native>
+
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfscopyic.log</cyclestr></join>
+
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
+	<envar><name>COMPONENT</name><value>atmos</value></envar>
+	<envar><name>CASE</name><value>&CASE;</value></envar>
+	<envar><name>ICSDIR</name><value>&ICSDIR;</value></envar>
+
+	<dependency>
+		<and>
+			<not>
+				<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT</cyclestr></datadep>
+			</not>
+			<and>
+				<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/gfs_data.tile6.nc</cyclestr></datadep>
+				<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
+			</and>
+		</and>
+	</dependency>
+
+</task>
+
+<task name="gfsaerosol_init" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+	<command>&JOBS_DIR;/aerosol_init.sh</command>
+
+	<jobname><cyclestr>&PSLOT;_gfsaerosol_init_@H</cyclestr></jobname>
+	<account>gsd-fv3</account>
+	<queue>batch</queue>
+	<partition>hera</partition>
+	<walltime>00:30:00</walltime>
+	<nodes>1:ppn=40:tpp=1</nodes>
+	<memory>6G</memory>
+	<native>&NATIVE_STR;</native>
+
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsaerosol_init.log</cyclestr></join>
+
+	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
+	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+
+	<dependency>
+		<and>
+			<taskdep task="gfscopyic"/>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_ctrl.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile1.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile2.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile3.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile4.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile5.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile6.nc</cyclestr></datadep>
+			<cycleexistdep cycle_offset="-24:00:00"/>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.tile1.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.tile2.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.tile3.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.tile4.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.tile5.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_core.res.tile6.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_tracer.res.tile1.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_tracer.res.tile2.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_tracer.res.tile3.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_tracer.res.tile4.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_tracer.res.tile5.nc</cyclestr></datadep>
+			<datadep><cyclestr offset="-24:00:00">&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RERUN_RESTART/</cyclestr><cyclestr>@Y@m@d.@H0000.fv_tracer.res.tile6.nc</cyclestr></datadep>
+		</and>
+	</dependency>
+
+</task>
+
+<task name="prepchem" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+	<command>&JOBS_DIR;/prepchem.sh</command>
+	
+	<jobname><cyclestr>&PSLOT;_prepchem_@H</cyclestr></jobname>
+	<account>gsd-fv3</account>
+	<queue>batch</queue>
+	<partition>hera</partition>
+	<walltime>00:15:00</walltime>
+	<nodes>1:ppn=2</nodes>
+	<native>&NATIVE_STR;</native>
+	
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/prepchem.log</cyclestr></join>
+	
+	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+	
+	<!-- for C96, add C96 directory at end  -->
+  <!--    <envar><name>BINGB</name><value>&BINGB;/&CASE;</value></envar> -->
+	<envar><name>BINGB</name><value>&BINGB;</value></envar>
+	<envar><name>NCGB</name><value>&NCGB;</value></envar>
+	<!-- use lzhang directory for PUBEMI as long as FV3-CHEM is still running in realtime; data stored by YMD directory -->
+	<!-- <envar><name>PUBEMI</name><value>&PUBEMI;/@Y@m@d/</value></envar>-->
+	<envar><name>PUBEMI</name><value>&PUBEMI;</value></envar>
+	<envar><name>EMIINPUT</name><value>&EMIINPUT;</value></envar>
+	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
+	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+    
+	<envar><name>SYEAR</name><value><cyclestr>@Y</cyclestr></value></envar>
+	<envar><name>SMONTH</name><value><cyclestr>@m</cyclestr></value></envar>
+	<envar><name>SDAY</name><value><cyclestr>@d</cyclestr></value></envar>
+	<envar><name>SHOUR</name><value><cyclestr>@H</cyclestr></value></envar>
+	<dependency>
+		<or>
+			<!-- use lzhang directory for PUBEMI as long as FV3-CHEM is still running in realtime; data stored by YMD directory
+			<datadep age="003"><cyclestr>&PUBEMI;/@Y@m@d/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
+			<datadep age="003"><cyclestr>&PUBEMI;/@Y@m@d/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>-->
+			<datadep age="003"><cyclestr>&PUBEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
+			<datadep age="003"><cyclestr>&PUBEMI;/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>
+			<!--<datadep><cyclestr>&PUBEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>        -->
+			<datadep age="003"><cyclestr>&ARCEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
+			<datadep age="003"><cyclestr>&ARCEMI;/@Y@m@d/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>
+		</or>
+	</dependency>
+</task>
+
+<task name="gfsfcst" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+	<command>&JOBS_DIR;/fcst.sh</command>
+
+	<jobname><cyclestr>&PSLOT;_gfsfcst_@H</cyclestr></jobname>
+	<account>gsd-fv3</account>
+	<queue>batch</queue> 
+	<partition>hera</partition>
+	<walltime>01:40:00</walltime> 
+<!--	<nodes>62:ppn=20:tpp=2</nodes>  -->         <!--16x12, 2/40 -->
+	<nodes>33:ppn=20:tpp=2</nodes>              <!-- 8x12, 2/40 -->
+	<native>&NATIVE_STR;</native>
+
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsfcst.log</cyclestr></join>
+
+	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+	<envar><name>CDUMP</name><value>gfs</value></envar>
+	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+
+	<dependency>
+		<and>
+			<or>
+				<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
+				<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
+			</or>
+			<or>
+				<taskdep task="gfsaerosol_init"/>
+				<not><cycleexistdep cycle_offset="-24:00:00"/></not>
+			</or>
+			<taskdep task="prepchem"/>
+		</and>
+	</dependency>
+
+</task>
+
+<metatask name="gfspost">
+
+	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120 _f126-f126 _f132-f132 _f138-f138 _f144-f144 _f150-f150 _f156-f156 _f162-f162 _f168-f168</var>
+	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 f150 f156 f162 f168</var>
+	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 f150 f156 f162 f168</var>
+
+	<task name="gfspost#grp#" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+		<command>&JOBS_DIR;/post.sh</command>
+
+		<jobname><cyclestr>&PSLOT;_gfspost#grp#_@H</cyclestr></jobname>
+		<account>gsd-fv3</account>
+		<queue>batch</queue>
+		<partition>hera</partition>
+		<walltime>00:20:00</walltime>
+		<nodes>1:ppn=40:tpp=1</nodes>
+		<native>&NATIVE_STR;</native>
+
+		<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfspost#grp#.log</cyclestr></join>
+
+		<envar><name>RUN_ENVIR</name><value>emc</value></envar>
+		<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+		<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+		<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+		<envar><name>CDUMP</name><value>gfs</value></envar>
+		<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+		<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+		<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+		<envar><name>FHRGRP</name><value>#grp#</value></envar>
+		<envar><name>FHRLST</name><value>#lst#</value></envar>
+
+		<dependency>
+				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.log#dep#.txt</cyclestr></datadep>
+		</dependency>
+
+	</task>
+
+</metatask>
+
+<task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+	<command>&JOBS_DIR;/arch.sh</command>
+
+	<jobname><cyclestr>&PSLOT;_gfsarch_@H</cyclestr></jobname>
+	<account>gsd-fv3</account>
+	<queue>batch</queue>
+	<partition>service</partition>
+	<walltime>06:00:00</walltime>
+	<nodes>1:ppn=1:tpp=1</nodes>
+	<memory>2048M</memory>
+	<native>&NATIVE_STR;</native>
+
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch.log</cyclestr></join>
+
+	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+	<envar><name>CDUMP</name><value>gfs</value></envar>
+	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+
+	<dependency>
+		<and>
+			<metataskdep metatask="gfspost"/>
+                        <!--<datadep age="600"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/ncl/a2/files.zip</cyclestr></datadep> add PyGraf dependency -->
+		</and>
+	</dependency>
+
+</task>
+
+</workflow>
