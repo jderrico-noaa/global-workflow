@@ -86,8 +86,8 @@ if [ -d ../sorc/gldas.fd ]; then
     $LINK ../sorc/gldas.fd/jobs/JGDAS_ATMOS_GLDAS            .
 fi
 cd ${pwd}/../parm               ||exit 8
-    # [[ -d post ]] && rm -rf post
-    # $LINK ../sorc/upp.fd/parm                           post
+    [[ -d post ]] && rm -rf post
+    $LINK ../sorc/upp.fd/parm                           post
     if [ -d ../sorc/gldas.fd ]; then
       [[ -d gldas ]] && rm -rf gldas
       $LINK ../sorc/gldas.fd/parm                         gldas
@@ -101,7 +101,7 @@ cd ${pwd}/../parm/post          ||exit 8
         post_tag_gfs128 post_tag_gfs65 gtg.config.gfs gtg_imprintings.txt nam_micro_lookup.dat \
         AEROSOL_LUTS.dat optics_luts_DUST.dat optics_luts_SALT.dat optics_luts_SOOT.dat optics_luts_SUSO.dat optics_luts_WASO.dat \
         ; do
-        $LINK ../../sorc/upp.fd/parm/$file .
+        $LINK  "${pwd}/upp.fd/parm/${file}" .              ## JKH
     done
 cd ${pwd}/../scripts            ||exit 8
     $LINK ../sorc/ufs_utils.fd/scripts/exemcsfc_global_sfc_prep.sh .
