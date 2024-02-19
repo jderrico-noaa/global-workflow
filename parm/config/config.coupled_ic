@@ -8,8 +8,7 @@ echo "BEGIN: config.coupled_ic"
 source $EXPDIR/config.resources coupled_ic
 
 if [[ "$machine" == "HERA" ]]; then
-  #JKHexport BASE_CPLIC="/scratch1/NCEPDEV/climate/role.ufscpara/IC"
-  export BASE_CPLIC="/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127"
+  export BASE_CPLIC="/scratch1/NCEPDEV/climate/role.ufscpara/IC"
 elif [[ "$machine" == "ORION" ]]; then
   export BASE_CPLIC="/work/noaa/global/wkolczyn/noscrub/global-workflow/IC"
 fi
