@@ -16,9 +16,14 @@ source "$HOMEgfs/ush/preamble.sh"
 
 ###############################################################
 # Source FV3GFS workflow modules
-. $HOMEgfs/ush/load_fv3gfs_modules.sh
-status=$?
-[[ $status -ne 0 ]] && exit $status
+#JKH. $HOMEgfs/ush/load_fv3gfs_modules.sh
+#JKHstatus=$?
+#JKH[[ $status -ne 0 ]] && exit $status
+
+#JKH load ufs-utils modules
+module use $HOMEgfs/sorc/ufs_utils.fd/modulefiles
+module load build.hera.intel
+module list
 
 ###############################################################
 # Source relevant configs
@@ -43,7 +48,7 @@ export mm=$(echo $CDATE | cut -c5-6)
 export dd=$(echo $CDATE | cut -c7-8)
 export hh=${cyc:-$(echo $CDATE | cut -c9-10)}
 
-export DATA=${DATA:-${DATAROOT}/init}
+export DATA=${DATA:-${DATAROOT}/init_$CDATE}
 export EXTRACT_DIR=${EXTRACT_DIR:-$ROTDIR}
 export WORKDIR=${WORKDIR:-$DATA}
 export OUTDIR=${OUTDIR:-$ROTDIR}
