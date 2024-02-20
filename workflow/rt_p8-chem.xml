@@ -16,7 +16,7 @@
         <!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
 	<!ENTITY EXPDIR "&HOMEgfs;/FV3GFSwfm/&PSLOT;">
 	<!ENTITY ROTDIR "&HOMEgfs;/FV3GFSrun/&PSLOT;">
-	<!ENTITY ICSDIR "&HOMEgfs;/FV3GFSrun/FV3ICS">
+	<!ENTITY ICSDIR "/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127">
 
 	<!-- use RUNDIR1 as long as FV3-CHEM is still running in realtime   -->
 	<!ENTITY RUNDIR1 "/scratch1/BMC/gsd-fv3/NCEPDEV/stmp3/role.rtfim/RUNDIRS/rt_fv3gfs_chem">

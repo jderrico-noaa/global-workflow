@@ -16,7 +16,7 @@
         <!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
 	<!ENTITY EXPDIR "&HOMEgfs;/FV3GFSwfm/&PSLOT;">
 	<!ENTITY ROTDIR "&HOMEgfs;/FV3GFSrun/&PSLOT;">
-	<!ENTITY ICSDIR "&HOMEgfs;/FV3GFSrun/FV3ICS">
+	<!ENTITY ICSDIR "/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127">
 	<!ENTITY NATIVE_STR "--export=NONE">
 	<!ENTITY MAXTRIES "2">
 ]>
