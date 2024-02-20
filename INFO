@@ -1,0 +1,13 @@
+==============
+ Feb 19, 2024 
+==============
+** effective 00Z 02/01/2024
+
+ CCPP-Chem updated to P8-Chem
+
+   UFS:  start with Li's branch, p8-ufs-ccpp-chem, 01Dec23, 792a6dd 
+           https://github.com/zhanglikate/ufs-weather-model.git (Li's ufs-weather-model fork)
+
+   G-W:  start with Li's branch, li_develop-ufs-ccpp-chem, 08Nov23, 5ba1b38 
+           (prototype/8 tag of global-workflow, 09Aug2022, 9a538ee, + Li's changes for chemistry)
+           https://github.com/zhanglikate/global-workflow.git
