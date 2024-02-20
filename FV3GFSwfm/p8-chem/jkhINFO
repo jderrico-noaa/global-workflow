@@ -21,3 +21,6 @@
  02/02 
    change back to IAER=2011 in config.fcst
 
+ 02/16
+   modify coupled_ic task to copy from ICSDIR to ROTDIR
+     - create GSL specific jobs/rocoto/coupled_ic.sh

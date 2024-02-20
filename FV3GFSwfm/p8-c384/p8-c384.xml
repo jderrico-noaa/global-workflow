@@ -9,9 +9,11 @@
 		This workflow was automatically generated at 2024-01-24 00:05:16.294748
 	-->
 	<!ENTITY PSLOT "p8-c384">
-	<!ENTITY ICSDIR "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/FV3ICS">
-	<!ENTITY ROTDIR "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-c384">
-	<!ENTITY JOBS_DIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/jobs/rocoto">
+	<!ENTITY ICSDIR "/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127">
+	<!ENTITY HOMEgfs "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem">
+	<!ENTITY EXPDIR "&HOMEgfs;/FV3GFSwfm/&PSLOT;">
+	<!ENTITY ROTDIR "&HOMEgfs;/FV3GFSrun/&PSLOT;">
+	<!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
 	<!ENTITY RUNDIR "&ROTDIR;/../RUNDIRS/&PSLOT;">
 	<!ENTITY CDUMP "gfs">
 	<!ENTITY CASE "C384">
@@ -25,7 +27,7 @@
 	<log verbosity="10"><cyclestr>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-c384/logs/@Y@m@d@H.log</cyclestr></log>
 
 	<!-- Define the cycles -->
-	<cycledef group="gfs">202401010000 202401020000 24:00:00</cycledef>
+	<cycledef group="gfs">202402050000 202402060000 24:00:00</cycledef>
 
 <task name="gfsfv3ic" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -80,9 +82,9 @@
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsfcst.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-c384</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-c384</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>CDUMP</name><value>gfs</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
@@ -128,9 +130,9 @@
 		<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfspost#grp#.log</cyclestr></join>
 
 		<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-		<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-		<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-c384</value></envar>
-		<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-c384</value></envar>
+		<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+		<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+		<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 		<envar><name>CDUMP</name><value>gfs</value></envar>
 		<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 		<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
@@ -139,12 +141,13 @@
 		<envar><name>FHRLST</name><value>#lst#</value></envar>
 
 		<dependency>
-			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/&COMPONENT;/gfs.t@Hz.log#dep#.txt</cyclestr></datadep>
+				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.log#dep#.txt</cyclestr></datadep>
 		</dependency>
 
 	</task>
 
 </metatask>
+
 
 <task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -162,9 +165,9 @@
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-c384</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-c384</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>CDUMP</name><value>gfs</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
@@ -173,6 +176,7 @@
 	<dependency>
 		<and>
 			<metataskdep metatask="gfspost"/>
+                        <!--<datadep age="600"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/ncl/a2/files.zip</cyclestr></datadep> -->
 		</and>
 	</dependency>
 

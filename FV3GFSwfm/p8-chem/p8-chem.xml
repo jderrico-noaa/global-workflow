@@ -9,14 +9,16 @@
 		This workflow was automatically generated at 2024-01-24 00:05:12.456714
 	-->
 	<!ENTITY PSLOT "p8-chem">
-	<!ENTITY ICSDIR "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/FV3ICS">
-	<!ENTITY ROTDIR "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-chem">
-	<!ENTITY JOBS_DIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/jobs/rocoto">
+	<!ENTITY ICSDIR "/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127">
+	<!ENTITY HOMEgfs "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem">
+	<!ENTITY EXPDIR "&HOMEgfs;/FV3GFSwfm/&PSLOT;">
+	<!ENTITY ROTDIR "&HOMEgfs;/FV3GFSrun/&PSLOT;">
+	<!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
 	<!ENTITY RUNDIR "&ROTDIR;/../RUNDIRS/&PSLOT;">
         <!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/emi_&CASE;">
 	<!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_&CASE;">
-	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/GBBEPx">
 	<!ENTITY PUBEMI "/scratch2/BMC/public/data/grids/nesdis/GBBEPx/&CASE;">
+	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/GBBEPx">
 	<!-- use lzhang GBBEPx directory as long as FV3-CHEM is still running in realtime 
 	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx">-->
 
@@ -34,7 +36,7 @@
 	<!ENTITY CASE "C384">
 	<!ENTITY COMPONENT "atmos">
 	<!ENTITY NATIVE_STR "--export=NONE">
-	<!ENTITY MAXTRIES "2">
+	<!ENTITY MAXTRIES "1">
 ]>
 
 <workflow realtime="F" scheduler="slurm" cyclethrottle="3" taskthrottle="25">
@@ -42,80 +44,54 @@
 	<log verbosity="10"><cyclestr>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem/logs/@Y@m@d@H.log</cyclestr></log>
 
 	<!-- Define the cycles -->
-	<cycledef group="gfs">202401010000 202401020000 24:00:00</cycledef>
+	<cycledef group="gfs">202402050000 202402070000 24:00:00</cycledef>
 
-<!--
-<task name="gfsgetic" cycledefs="gfs" maxtries="&MAXTRIES;">
+<task name="gfscoupled_ic" cycledefs="gfs" maxtries="&MAXTRIES;">
 
-	<command>&JOBS_DIR;/getic.sh</command>
+        <command>&JOBS_DIR;/coupled_ic.sh</command>
 
-	<jobname><cyclestr>&PSLOT;_gfsgetic_@H</cyclestr></jobname>
-	<account>gsd-fv3</account>
-	<queue>batch</queue>
-	<partition>service</partition>
-	<walltime>00:10:00</walltime>
-	<nodes>1:ppn=1:tpp=1</nodes>
-	<native>&NATIVE_STR;</native>
+        <jobname><cyclestr>&PSLOT;_gfscoupled_ic_@H</cyclestr></jobname>
+        <account>gsd-fv3</account>
+        <queue>batch</queue>
+        <partition>hera</partition>
+        <walltime>00:15:00</walltime>
+        <nodes>1:ppn=1:tpp=1</nodes>
+        <native>&NATIVE_STR;</native>
 
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsgetic.log</cyclestr></join>
+        <join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfscoupled_ic.log</cyclestr></join>
 
-	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-chem</value></envar>
-	<envar><name>CDUMP</name><value>gfs</value></envar>
-	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
-	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
-	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
-
-	<dependency>
-		<nor>
-			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
-			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/RERUN_RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
-		</nor>
-	</dependency>
-
-</task>
-
-<task name="gfsinit" cycledefs="gfs" maxtries="&MAXTRIES;">
-
-	<command>&JOBS_DIR;/init.sh</command>
-
-	<jobname><cyclestr>&PSLOT;_gfsinit_@H</cyclestr></jobname>
-	<account>gsd-fv3</account>
-	<queue>batch</queue>
-	<partition>hera</partition>
-	<walltime>00:30:00</walltime>
-	<nodes>4:ppn=6:tpp=1</nodes>
-	<memory>70G</memory>
-	<native>&NATIVE_STR;</native>
-
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsinit.log</cyclestr></join>
-
-	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-chem</value></envar>
-	<envar><name>CDUMP</name><value>gfs</value></envar>
-	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
-	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
-	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+        <envar><name>RUN_ENVIR</name><value>emc</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
+        <envar><name>NET</name><value>gfs</value></envar>
+        <envar><name>CDUMP</name><value>gfs</value></envar>
+        <envar><name>RUN</name><value>gfs</value></envar>
+        <envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+        <envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+        <envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+        <envar><name>COMROOT</name><value>/scratch1/NCEPDEV/global/glopara/com</value></envar>
+        <envar><name>DATAROOT</name><value>&ROTDIR;/../RUNDIRS/&PSLOT;</value></envar>
 
 	<dependency>
 		<and>
-			<or>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/gfs.t@Hz.sanl</cyclestr></datadep>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/gfs.t@Hz.atmanl.nemsio</cyclestr></datadep>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/gfs.t@Hz.atmanl.nc</cyclestr></datadep>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.atmanl.nc</cyclestr></datadep>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc</cyclestr></datadep>
-			</or>
-			<taskdep task="gfsgetic"/>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_ctrl.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_data.tile1.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_data.tile2.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_data.tile3.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_data.tile4.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_data.tile5.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/gfs_data.tile6.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/sfc_data.tile1.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/sfc_data.tile2.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/sfc_data.tile3.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/sfc_data.tile4.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/sfc_data.tile5.nc</cyclestr></datadep>
+			<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
 		</and>
 	</dependency>
 
 </task>
--->
 
 <task name="gfsaerosol_init" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -133,9 +109,9 @@
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsaerosol_init.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/FV3GFSwfm/p8-chem</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/FV3GFSrun/p8-chem</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
@@ -143,7 +119,7 @@
 
 	<dependency>
 		<and>
-<!--			<taskdep task="gfsinit"/> -->
+			<taskdep task="gfscoupled_ic"/>
 			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_ctrl.nc</cyclestr></datadep>
 			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile1.nc</cyclestr></datadep>
 			<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/gfs_data.tile2.nc</cyclestr></datadep>
@@ -185,9 +161,9 @@
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/prepchem.log</cyclestr></join>
 	
 	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/FV3GFSwfm/p8-chem</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem/FV3GFSrun/p8-chem</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	
 	<!-- for C96, add C96 directory at end  -->
   <!--    <envar><name>BINGB</name><value>&BINGB;/&CASE;</value></envar> -->
@@ -238,9 +214,9 @@
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsfcst.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-chem</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>CDUMP</name><value>gfs</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
@@ -291,9 +267,9 @@
 		<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfspost#grp#.log</cyclestr></join>
 
 		<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-		<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-		<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem</value></envar>
-		<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-chem</value></envar>
+		<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+		<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+		<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 		<envar><name>CDUMP</name><value>gfs</value></envar>
 		<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 		<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
@@ -326,9 +302,9 @@
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>emc</value></envar>
-	<envar><name>HOMEgfs</name><value>/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem</value></envar>
-	<envar><name>EXPDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem</value></envar>
-	<envar><name>ROTDIR</name><value>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/p8-chem</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>CDUMP</name><value>gfs</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
