@@ -92,17 +92,17 @@ cd ${pwd}/../parm               ||exit 8
       [[ -d gldas ]] && rm -rf gldas
       $LINK ../sorc/gldas.fd/parm                         gldas
     fi
-cd ${pwd}/../parm/post          ||exit 8
-    for file in postxconfig-NT-GEFS-ANL.txt postxconfig-NT-GEFS-F00.txt postxconfig-NT-GEFS.txt postxconfig-NT-GFS-ANL.txt \
-        postxconfig-NT-GFS-F00-TWO.txt postxconfig-NT-GFS-F00.txt postxconfig-NT-GFS-FLUX-F00.txt postxconfig-NT-GFS-FLUX.txt \
-        postxconfig-NT-GFS-GOES.txt postxconfig-NT-GFS-TWO.txt postxconfig-NT-GFS-WAFS-ANL.txt postxconfig-NT-GFS-WAFS.txt \
-        postxconfig-NT-CCPP-CHEM.txt postxconfig-NT-CCPP-CHEM-F00.txt postxconfig-NT-CCPP-CHEM-MET.txt \
-        postxconfig-NT-GFS.txt postxconfig-NT-gefs-aerosol.txt postxconfig-NT-gefs-chem.txt params_grib2_tbl_new \
-        post_tag_gfs128 post_tag_gfs65 gtg.config.gfs gtg_imprintings.txt nam_micro_lookup.dat \
-        AEROSOL_LUTS.dat optics_luts_DUST.dat optics_luts_SALT.dat optics_luts_SOOT.dat optics_luts_SUSO.dat optics_luts_WASO.dat \
-        ; do
-        $LINK  "${pwd}/upp.fd/parm/${file}" .              ## JKH
-    done
+#JKHcd ${pwd}/../parm/post          ||exit 8
+#JKH    for file in postxconfig-NT-GEFS-ANL.txt postxconfig-NT-GEFS-F00.txt postxconfig-NT-GEFS.txt postxconfig-NT-GFS-ANL.txt \
+#JKH        postxconfig-NT-GFS-F00-TWO.txt postxconfig-NT-GFS-F00.txt postxconfig-NT-GFS-FLUX-F00.txt postxconfig-NT-GFS-FLUX.txt \
+#JKH        postxconfig-NT-GFS-GOES.txt postxconfig-NT-GFS-TWO.txt postxconfig-NT-GFS-WAFS-ANL.txt postxconfig-NT-GFS-WAFS.txt \
+#JKH        postxconfig-NT-CCPP-CHEM.txt postxconfig-NT-CCPP-CHEM-F00.txt postxconfig-NT-CCPP-CHEM-MET.txt \
+#JKH        postxconfig-NT-GFS.txt postxconfig-NT-gefs-aerosol.txt postxconfig-NT-gefs-chem.txt params_grib2_tbl_new \
+#JKH        post_tag_gfs128 post_tag_gfs65 gtg.config.gfs gtg_imprintings.txt nam_micro_lookup.dat \
+#JKH        AEROSOL_LUTS.dat optics_luts_DUST.dat optics_luts_SALT.dat optics_luts_SOOT.dat optics_luts_SUSO.dat optics_luts_WASO.dat \
+#JKH        ; do
+#JKH        $LINK  "${pwd}/upp.fd/parm/${file}" .              ## JKH
+#JKH    done
 cd ${pwd}/../scripts            ||exit 8
     $LINK ../sorc/ufs_utils.fd/scripts/exemcsfc_global_sfc_prep.sh .
     if [ -d ../sorc/gldas.fd ]; then
