@@ -108,8 +108,8 @@ CHECKOUT_GDAS="NO"
 checkout_gtg="NO"
 checkout_wafs="NO"
 checkout_prepchem="YES"
-### 01Dec23 in Kate Zhang's branch
-ufs_model_hash="792a6dd"
+### Kate Zhang's 27Feb24 thom_ls branch
+ufs_model_hash="ed88c12"
 
 # Parse command line arguments
 while getopts ":chgum:o" option; do
