@@ -40,6 +40,16 @@ if [ $HPSSARCH = "YES" ]; then
 
   if [ $CDUMP = "gfs" ]; then
   
+      # archive INPUT directory  (initial conditions)
+      htar -P -hcvf $ATARDIR/$YYYY/$CDATE/atmos/${CDATE}_ics.tar INPUT
+      status=$?
+      if [ $status -ne 0 ]; then
+        echo "HTAR $CDATE ics failed"
+        exit $status
+      else
+        echo "no INPUT files found!"
+      fi
+
       # archive RESTART directory 
       htar -P -hcvf $ATARDIR/$YYYY/$CDATE/atmos/${CDATE}_restart.tar RERUN_RESTART/2*
       status=$?
