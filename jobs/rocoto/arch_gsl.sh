@@ -46,18 +46,17 @@ if [ $HPSSARCH = "YES" ]; then
       if [ $status -ne 0 ]; then
         echo "HTAR $CDATE ics failed"
         exit $status
-      else
-        echo "no INPUT files found!"
       fi
 
       # archive RESTART directory 
-      htar -P -hcvf $ATARDIR/$YYYY/$CDATE/atmos/${CDATE}_restart.tar RERUN_RESTART/2*
+      #   only archive tomorrow's data
+      nday=$($NDATE +24 ${CDATE})
+      nextday=`echo ${nday} | cut -c1-8`
+      htar -P -hcvf $ATARDIR/$YYYY/$CDATE/atmos/${CDATE}_restart.tar RERUN_RESTART/${nextday}*
       status=$?
       if [ $status -ne 0 ]; then
         echo "HTAR $CDATE restart failed"
         exit $status
-      else
-        echo "no RERUN_RESTART files found!"
       fi
 
       # archive GRIB2 files (gfs.t00z.pgrb2.0p25.fHHH, gfs.t00z.pgrb2.0p50.fHHH)
@@ -68,8 +67,6 @@ if [ $HPSSARCH = "YES" ]; then
           echo "HTAR $CDATE pgrb2.tar failed"
           exit $status
         fi
-      else
-        echo "no grib2 files found!"
       fi
 
       # archive PyGraf files (files.zip)
@@ -80,8 +77,6 @@ if [ $HPSSARCH = "YES" ]; then
           echo "HTAR $CDATE img.tar failed"
           exit $status
         fi
-      else
-        echo "no PyGraf files found!"
       fi
 
   fi
