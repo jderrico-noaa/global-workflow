@@ -21,7 +21,7 @@ export PARTITION_BATCH="hera"
 HPSS_PROJECT=fim                                  ## JKH
 
 # Directories relative to installation areas:
-export HOMEgfs=/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/test_p8-chem
+export HOMEgfs=/scratch1/BMC/gsd-fv3/rtruns/P8-Chem
 export PARMgfs=$HOMEgfs/parm
 export FIXgfs=$HOMEgfs/fix
 export USHgfs=$HOMEgfs/ush
@@ -97,14 +97,14 @@ export BASE_ENV="$HOMEgfs/env"
 export BASE_JOB="$HOMEgfs/jobs/rocoto"
 
 # EXPERIMENT specific environment parameters
-export SDATE=2024010100
+export SDATE=2024020100
 export FDATE=@FDATE@
-export EDATE=2024010100
+export EDATE=2034010100
 export EXP_WARM_START=".false."
 export assim_freq=24                              ## JKH
-export PSLOT="p8-chem"
-export EXPDIR="/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/$PSLOT"
-export ROTDIR="/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSrun/$PSLOT"
+export PSLOT="rt_p8-chem"
+export EXPDIR="/scratch1/BMC/gsd-fv3/rtruns/P8-Chem//FV3GFSwfm/$PSLOT"
+export ROTDIR="/scratch1/BMC/gsd-fv3/rtruns/P8-Chem//FV3GFSrun/$PSLOT"
 export ROTDIR_DUMP="YES"                #Note: A value of "NO" does not currently work
 export DUMP_SUFFIX=""
 if [[ "$CDATE" -ge "2019092100" && "$CDATE" -le "2019110700" ]]; then
@@ -114,7 +114,7 @@ export RUNDIR="$STMP/RUNDIRS/$PSLOT"
 export DATAROOT="$RUNDIR/$CDATE/$CDUMP"
 export ARCDIR="$NOSCRUB/archive/$PSLOT"
 export ICSDIR="/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127"
-export ATARDIR="/BMC/$HPSS_PROJECT/1year/$USER/$machine/scratch/$PSLOT"
+export ATARDIR="/BMC/$HPSS_PROJECT/2year/$PSLOT"
 
 # Commonly defined parameters in JJOBS
 export envir=${envir:-"prod"}
@@ -256,14 +256,10 @@ export gfs_cyc=1 # 0: no GFS cycle, 1: 00Z only, 2: 00Z and 12Z only, 4: all 4 c
 # GFS output and frequency
 export FHMIN_GFS=0
 
-#JKHexport FHMAX_GFS_00=${FHMAX_GFS_00:-168}      ## JKH
-#JKHexport FHMAX_GFS_06=${FHMAX_GFS_06:-168}      ## JKH
-#JKHexport FHMAX_GFS_12=${FHMAX_GFS_12:-168}      ## JKH
-#JKHexport FHMAX_GFS_18=${FHMAX_GFS_18:-168}      ## JKH
-export FHMAX_GFS_00=${FHMAX_GFS_00:-24}      ## JKH
-export FHMAX_GFS_06=${FHMAX_GFS_06:-24}      ## JKH
-export FHMAX_GFS_12=${FHMAX_GFS_12:-24}      ## JKH
-export FHMAX_GFS_18=${FHMAX_GFS_18:-24}      ## JKH
+export FHMAX_GFS_00=${FHMAX_GFS_00:-168}      ## JKH
+export FHMAX_GFS_06=${FHMAX_GFS_06:-168}      ## JKH
+export FHMAX_GFS_12=${FHMAX_GFS_12:-168}      ## JKH
+export FHMAX_GFS_18=${FHMAX_GFS_18:-168}      ## JKH
 export FHMAX_GFS=$(eval echo \${FHMAX_GFS_$cyc})
 
 export FHOUT_GFS=${FHOUT_GFS:-6}              ## JKH
@@ -287,7 +283,6 @@ export QUILTING=".true."
 export OUTPUT_GRID="gaussian_grid"
 export OUTPUT_FILE="netcdf"
 export WRITE_DOPOST=".true."
-#JKHexport WRITE_DOPOST=".false."      ## JKH
 export WRITE_NSFLIP=".true."
 
 # suffix options depending on file format

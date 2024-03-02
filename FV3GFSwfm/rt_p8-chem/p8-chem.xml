@@ -8,43 +8,36 @@
 	NOTES:
 		This workflow was automatically generated at 2024-01-24 00:05:12.456714
 	-->
-	<!ENTITY PSLOT "p8-chem">
-	<!ENTITY ICSDIR "/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127">
-	<!ENTITY HOMEgfs "/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem">
+
+	<!ENTITY PSLOT "rt_p8-chem">
+        <!ENTITY HOMEgfs "/scratch1/BMC/gsd-fv3/rtruns/P8-Chem/">
+        <!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
 	<!ENTITY EXPDIR "&HOMEgfs;/FV3GFSwfm/&PSLOT;">
 	<!ENTITY ROTDIR "&HOMEgfs;/FV3GFSrun/&PSLOT;">
-	<!ENTITY JOBS_DIR "&HOMEgfs;/jobs/rocoto">
+	<!ENTITY ICSDIR "/scratch1/BMC/gsd-fv3/rtruns/FV3ICS_L127">
+
 	<!ENTITY RUNDIR "&ROTDIR;/../RUNDIRS/&PSLOT;">
-        <!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/emi_&CASE;">
-	<!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_&CASE;">
-	<!ENTITY PUBEMI "/scratch2/BMC/public/data/grids/nesdis/GBBEPx/&CASE;">
-	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/GBBEPx">
-	<!-- use lzhang GBBEPx directory as long as FV3-CHEM is still running in realtime 
-	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx">-->
 
-	<!ENTITY BINGB "/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/scratch/tmp/GBBEPx">
+	<!-- use lzhang GBBEPx directory as long as FV3-CHEM is still running in realtime -->
+	<!ENTITY PUBEMI "/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx">
+<!--	<!ENTITY PUBEMI "/scratch2/BMC/public/data/grids/nesdis/GBBEPx/&CASE;"> -->
 	<!ENTITY BINGB "/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx">
+	<!ENTITY EMIINPUT "/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_&CASE;">
 	<!ENTITY NCGB "&EMIINPUT;/GBBEPx">
-
-	<!-- use RUNDIR1 as long as FV3-CHEM is still running in realtime   -->
-	<!ENTITY RUNDIR1 "/scratch1/BMC/gsd-fv3/NCEPDEV/stmp3/role.rtfim/RUNDIRS/rt_fv3gfs_chem">
-	<!ENTITY RUNDIR "/scratch1/BMC/gsd-fv3/NCEPDEV/stmp3/role.rtfim/RUNDIRS/rt_ccpp-chem">
-
 	<!ENTITY ARCEMI "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/GBBEPx">
 
 	<!ENTITY CDUMP "gfs">
 	<!ENTITY CASE "C384">
-	<!ENTITY COMPONENT "atmos">
 	<!ENTITY NATIVE_STR "--export=NONE">
-	<!ENTITY MAXTRIES "1">
+	<!ENTITY MAXTRIES "2">
 ]>
 
-<workflow realtime="F" scheduler="slurm" cyclethrottle="3" taskthrottle="25">
+<workflow realtime="F" scheduler="slurm" cyclethrottle="6" taskthrottle="25">
 
-	<log verbosity="10"><cyclestr>/scratch2/BMC/gsd-fv3-dev/jhender/test/test_p8-chem//FV3GFSwfm/p8-chem/logs/@Y@m@d@H.log</cyclestr></log>
+	<log verbosity="10"><cyclestr>&EXPDIR;/logs/@Y@m@d@H.log</cyclestr></log>
 
 	<!-- Define the cycles -->
-	<cycledef group="gfs">202402050000 202402070000 24:00:00</cycledef>
+	<cycledef group="gfs">202402010000 202402200000 24:00:00</cycledef>
 
 <task name="gfscoupled_ic" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -170,8 +163,8 @@
 	<envar><name>BINGB</name><value>&BINGB;</value></envar>
 	<envar><name>NCGB</name><value>&NCGB;</value></envar>
 	<!-- use lzhang directory for PUBEMI as long as FV3-CHEM is still running in realtime; data stored by YMD directory -->
-	<!-- <envar><name>PUBEMI</name><value>&PUBEMI;/@Y@m@d/</value></envar>-->
-	<envar><name>PUBEMI</name><value>&PUBEMI;</value></envar>
+	<envar><name>PUBEMI</name><value>&PUBEMI;/@Y@m@d/</value></envar>
+	<!-- <envar><name>PUBEMI</name><value>&PUBEMI;</value></envar>-->
 	<envar><name>EMIINPUT</name><value>&EMIINPUT;</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
@@ -184,12 +177,11 @@
 	<envar><name>SHOUR</name><value><cyclestr>@H</cyclestr></value></envar>
 	<dependency>
 		<or>
-			<!-- use lzhang directory for PUBEMI as long as FV3-CHEM is still running in realtime; data stored by YMD directory
+			<!-- use lzhang directory for PUBEMI as long as FV3-CHEM is still running in realtime; data stored by YMD directory -->
 			<datadep age="003"><cyclestr>&PUBEMI;/@Y@m@d/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
-			<datadep age="003"><cyclestr>&PUBEMI;/@Y@m@d/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>-->
-			<datadep age="003"><cyclestr>&PUBEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
-			<datadep age="003"><cyclestr>&PUBEMI;/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>
-			<!--<datadep><cyclestr>&PUBEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>        -->
+			<datadep age="003"><cyclestr>&PUBEMI;/@Y@m@d/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>
+		        <!--<datadep age="003"><cyclestr>&PUBEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
+			<datadep age="003"><cyclestr>&PUBEMI;/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>-->
 			<datadep age="003"><cyclestr>&ARCEMI;/GBBEPx.FRP.003.@Y@m@d.FV3.C384Grid.tile6.bin</cyclestr></datadep>
 			<datadep age="003"><cyclestr>&ARCEMI;/@Y@m@d/GBBEPxFRP-MeanFRP-&CASE;GT6_v4r0_@Y@m@d.bin</cyclestr></datadep>
 		</or>
@@ -203,12 +195,10 @@
 	<jobname><cyclestr>&PSLOT;_gfsfcst_@H</cyclestr></jobname>
 	<account>gsd-fv3</account>
 	<queue>batch</queue> 
-<!--	<queue>debug</queue> --> 
 	<partition>hera</partition>
-	<walltime>01:40:00</walltime> 
-<!--	<walltime>00:30:00</walltime> --> 
+	<walltime>04:40:00</walltime> 
 <!--	<nodes>62:ppn=20:tpp=2</nodes>  -->         <!--16x12, 2/40 -->
-	<nodes>33:ppn=20:tpp=2</nodes>  <!-- 8x12, 2/40 -->
+	<nodes>33:ppn=20:tpp=2</nodes>              <!-- 8x12, 2/40 -->
 	<native>&NATIVE_STR;</native>
 
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsfcst.log</cyclestr></join>
@@ -240,17 +230,9 @@
 
 <metatask name="gfspost">
 
-<!--
-	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120</var>
-	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
-	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
-	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048</var>
-	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 </var>
-	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 </var>
--->
-	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 </var>
-	<var name="dep">f000 f006 f012 f018 f024 </var>
-	<var name="lst">f000 f006 f012 f018 f024 </var>
+	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120 _f126-f126 _f132-f132 _f138-f138 _f144-f144 _f150-f150 _f156-f156 _f162-f162 _f168-f168</var>
+	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 f150 f156 f162 f168</var>
+	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 f150 f156 f162 f168</var>
 
 	<task name="gfspost#grp#" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -278,7 +260,7 @@
 		<envar><name>FHRLST</name><value>#lst#</value></envar>
 
 		<dependency>
-				<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.log#dep#.txt</cyclestr></datadep>
+			<datadep><cyclestr>&ROTDIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.log#dep#.txt</cyclestr></datadep>
 		</dependency>
 
 	</task>
@@ -313,7 +295,7 @@
 	<dependency>
 		<and>
 			<metataskdep metatask="gfspost"/>
-                        <!--<datadep age="600"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/ncl/a2/files.zip</cyclestr></datadep> -->
+                        <datadep age="600"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/img/SW/files.zip</cyclestr></datadep>  <!--add PyGraf dependency-->
 		</and>
 	</dependency>
 

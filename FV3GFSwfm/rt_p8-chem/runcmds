@@ -1,0 +1,14 @@
+
+
+rocotorun -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/rt_p8-chem.xml -d ${HOME}/rt_dbfiles/rt_p8-chem.db
+rocotostat  -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/rt_p8-chem.xml -d ${HOME}/rt_dbfiles/rt_p8-chem.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/p8-chem.xml -d ${HOME}/retro_dbfiles/p8-chem.db
+rocotostat -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/p8-chem.xml -d ${HOME}/retro_dbfiles/p8-chem.db | m
+
+rocotorun -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/rt_pygraf_p8-chem.xml -d ${HOME}/rt_dbfiles/rt_pygraf_p8-chem.db
+rocotostat  -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/rt_pygraf_p8-chem.xml -d ${HOME}/rt_dbfiles/rt_pygraf_p8-chem.db  -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/pygraf_p8-chem.xml -d ${HOME}/retro_dbfiles/pygraf_p8-chem.db
+rocotostat -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem/FV3GFSwfm/rt_p8-chem/pygraf_p8-chem.xml -d ${HOME}/retro_dbfiles/pygraf_p8-chem.db | m
+

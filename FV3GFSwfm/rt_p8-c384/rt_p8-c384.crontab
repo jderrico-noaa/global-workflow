@@ -1,0 +1,5 @@
+
+#################### rt_p8-c384 ####################
+MAILTO=""
+*/5 * * * * /apps/rocoto/1.3.6/bin/rocotorun -d /scratch1/BMC/gsd-fv3/rtruns/P8-Chem//FV3GFSwfm/rt_p8-c384/rt_p8-c384.db -w /scratch1/BMC/gsd-fv3/rtruns/P8-Chem//FV3GFSwfm/rt_p8-c384/rt_p8-c384.xml
+#################################################################
