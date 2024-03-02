@@ -103,13 +103,13 @@ function checkout() {
 # Set defaults for variables toggled by options
 export CLEAN="NO"
 CHECKOUT_GSI="NO"
-CHECKOUT_GSIUTILS="YES"
+CHECKOUT_GSIUTILS="NO"
 CHECKOUT_GDAS="NO"
 checkout_gtg="NO"
 checkout_wafs="NO"
-checkout_prepchem="YES"
-### Kate Zhang's 27Feb24 thom_ls branch
-ufs_model_hash="ed88c12"
+checkout_prepchem="NO"
+### Kate Zhang's 29Feb24 thom_ls branch
+ufs_model_hash="ffc3ece"
 
 # Parse command line arguments
 while getopts ":chgum:o" option; do
