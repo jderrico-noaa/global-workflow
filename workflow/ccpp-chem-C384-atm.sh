@@ -1,17 +1,17 @@
-USER=Kate.Zhang
+USER=role.rtfim
 
 
-BASEDIR=/scratch2/BMC/gsd-fv3-dev/lzhang/UFS-dev/global-workflow
+BASEDIR=/scratch1/BMC/gsd-fv3/rtruns/UFS-Chem
 STMP=/scratch1/NCEPDEV/stmp2/$USER/RUNDIRS
-IDATE=2016071500
-EDATE=2016071500
+IDATE=2024040200
+EDATE=2024040200
 APP=ATM
-PSLOT=AUFS_C384_CCPP
+PSLOT=rt_hr3-chem
 RES=384
 GFS_CYC=1
 START=cold
-COMROT=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/global/$USER/fv3gfs/comrot
-EXPDIR=/scratch2/BMC/gsd-fv3-dev/NCEPDEV/global/$USER/fv3gfs/expdir
+COMROT=$BASEDIR/FV3GFSrun
+EXPDIR=$BASEDIR/FV3GFSwfm
 ICSDIR=$COMROT/$PSLOT
 
 

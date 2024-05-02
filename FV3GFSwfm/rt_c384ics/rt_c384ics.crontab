@@ -1,0 +1,5 @@
+
+#################### rt_c384ics ####################
+MAILTO=""
+*/5 * * * * /apps/rocoto/1.3.7/bin/rocotorun -d /scratch1/BMC/gsd-fv3/rtruns/UFS-Chem/FV3GFSwfm/rt_c384ics/rt_c384ics.db -w /scratch1/BMC/gsd-fv3/rtruns/UFS-Chem/FV3GFSwfm/rt_c384ics/rt_c384ics.xml
+#################################################################

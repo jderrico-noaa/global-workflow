@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+
+########## config.atmanl ##########
+# configuration common to all atm var analysis tasks
+
+echo "BEGIN: config.atmanl"
+
+export OBS_LIST="${PARMgfs}/gdas/atm/obs/lists/gdas_prototype_3d.yaml.j2"
+export JEDIYAML="${PARMgfs}/gdas/atm/variational/3dvar_drpcg.yaml.j2"
+export STATICB_TYPE="gsibec"
+export INTERP_METHOD='barycentric'
+
+if [[ ${DOHYBVAR} = "YES" ]]; then
+    # shellcheck disable=SC2153
+    export CASE_ANL=${CASE_ENS}
+    export BERROR_YAML="${PARMgfs}/gdas/atm/berror/hybvar_${STATICB_TYPE}.yaml.j2"
+else
+    export CASE_ANL=${CASE}
+    export BERROR_YAML="${PARMgfs}/gdas/atm/berror/staticb_${STATICB_TYPE}.yaml.j2"
+fi
+
+export CRTM_FIX_YAML="${PARMgfs}/gdas/atm_crtm_coeff.yaml.j2"
+export JEDI_FIX_YAML="${PARMgfs}/gdas/atm_jedi_fix.yaml.j2"
+
+export layout_x_atmanl=8
+export layout_y_atmanl=8
+
+export io_layout_x=1
+export io_layout_y=1
+
+export JEDIEXE=${EXECgfs}/fv3jedi_var.x
+
+echo "END: config.atmanl"

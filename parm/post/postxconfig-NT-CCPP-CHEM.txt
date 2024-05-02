@@ -1,1 +1,1 @@
-/scratch2/BMC/gsd-fv3-dev/lzhang/UFS-dev/global-workflow/sorc/upp.fd/parm/postxconfig-NT-CCPP-CHEM.txt
+/scratch1/BMC/gsd-fv3/rtruns/UFS-Chem/sorc/upp.fd/parm/postxconfig-NT-CCPP-CHEM.txt

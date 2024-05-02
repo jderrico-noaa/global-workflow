@@ -1,0 +1,4 @@
+2024-04-26 21:31:55 +0000 :: hfe02 :: Submitting mssFV3ICS
+2024-04-26 21:31:55 +0000 :: hfe02 :: Submission of mssFV3ICS succeeded, jobid=58766326
+2024-04-26 21:35:07 +0000 :: hfe05 :: Task mssFV3ICS, jobid=58766326, in state SUCCEEDED (COMPLETED), ran for 26.0 seconds, exit status=0, try=1 (of 2)
+2024-04-27 06:40:09 +0000 :: hfe04 :: This cycle is complete: Success

@@ -81,15 +81,7 @@ fi
  
 for n in $(seq 1 6); do
     tiledir=tile${n}
-    #mkdir -p $tiledir
-    #cd $tiledir
-    EMIINPUT=/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_${CASE}
-#    if [ ${EMIYEAR} -gt 2018 ];  then
     eval $NLN $EMIINPUT/EMI_$EMIYEAR/$SMONTH/emi_data.tile${n}.nc .
-#    else
-#    eval $NLN $EMIINPUT/EMI/$SMONTH/emi_data.tile${n}.nc .
-#    fi
-
     eval $NLN $EMIINPUT/EMI2/$SMONTH/emi2_data.tile${n}.nc .
     #eval $NLN $EMIINPUT/fengsha_2023/$SMONTH/dust_data.tile${n}.nc .
     eval $NLN $EMIINPUT/fengsha_2023/12month/dust_data_g12m.tile${n}.nc .
@@ -106,43 +98,45 @@ for n in $(seq 1 6); do
       eval $NLN ${CASE}-T-${emiss_date}0000-SO2-bb.bin ebu_so2.dat
     fi
     if [ $EMITYPE -eq 2 ]; then
-      #if [ ${res} -eq 384 ];  then
-         #DIRGB=/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx
-         DIRGB=/scratch2/NCEPDEV/naqfc/Kate.Zhang/GBBPEx_v004/$SYEAR
-      #else
-      #   DIRGB=/scratch1/BMC/gsd-fv3-dev/lzhang/GBBEPx/${CASE}
-      #fi
-      NCGB=/scratch1/BMC/gsd-fv3-dev/Haiqin.Li/Develop/emi_${CASE}/GBBEPx
-      PUBEMI=/scratch2/BMC/public/data/grids/sdsu/emissions
-      #PUBEMI=/scratch2/NCEPDEV/stmp1/Li.Pan/tmp
-    
       emiss_date1="$SYEAR$SMONTH$SDAY" # default value for branch testing      
       echo "emiss_date: $emiss_date1"
-      #mkdir -p $DIRGB/$emiss_date1
-      #$NCP $PUBEMI/*${emiss_date1}.*.bin $DIRGB/$emiss_date1/
-    
+      ## JKH  -  uncomment next 2 lines if not running FV3-CHEM prepchem task
+      mkdir -p $DIRGB/$emiss_date1
+      $NCP ${PUBEMI}/*${emiss_date1}.bin ${DIRGB}/$emiss_date1/
 
-      if [[ -f $NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc ]]; then
-        echo "NetCDF GBBEPx File $NCGB/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."
+      if [[ -f ${NCGB}/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc ]]; then
+        echo "NetCDF GBBEPx File ${NCGB}/${emiss_date1}/FIRE_GBBEPx_data.tile${n}.nc  exists, just link."
       else
-   
-        #if [ ${SYEAR} -eq 2016 ];  then
-          BC=GBBEPxemis-BC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
-          OC=GBBEPxemis-OC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
-          PM25=GBBEPxemis-PM25-${CASE}GT${n}_v4r0_${emiss_date1}.bin
-          SO2=GBBEPxemis-SO2-${CASE}GT${n}_v4r0_${emiss_date1}.bin
-          FRP=GBBEPxFRP-MeanFRP-${CASE}GT${n}_v4r0_${emiss_date1}.bin
-        #else
-        #  BC=GBBEPx.bc.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-        #  OC=GBBEPx.oc.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-        #  PM25=GBBEPx.pm25.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-        #  SO2=GBBEPx.so2.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-        #  FRP=meanFRP.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
-        #fi
-      
+
+        if [ ${SYEAR} -eq 2016 -o ${emiss_date1} -ge 20230115 ];  then           ## JKH - change date
+          if [ ${emiss_date1} -ge 20230509 ];  then                              ## JKH - change date
+            BC=GBBEPxemis-BC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            OC=GBBEPxemis-OC-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            SO2=GBBEPxemis-SO2-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            FRP=GBBEPxFRP-MeanFRP-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+            PM25=GBBEPxemis-PM25-${CASE}GT${n}_v4r0_${emiss_date1}.bin
+          else
+            BC=GBBEPx.emis_BC.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            OC=GBBEPx.emis_OC.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            SO2=GBBEPx.emis_SO2.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            FRP=GBBEPx.FRP.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            if [ ${SYEAR} -eq 2016 ];  then
+              PM25=GBBEPx.emis_PM25.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            else
+              PM25=GBBEPx.emis_PM2.5.003.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+            fi
+          fi
+        else
+          BC=GBBEPx.bc.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+          OC=GBBEPx.oc.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+          PM25=GBBEPx.pm25.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+          SO2=GBBEPx.so2.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+          FRP=meanFRP.${emiss_date1}.FV3.${CASE}Grid.tile${n}.bin
+        fi
+
         mkdir -p $NCGB/${emiss_date1}
         set -ue
-        module load intel/19.0.5.281 netcdf szip hdf5
+	module load gnu intel/2023.2.0 netcdf/4.7.0 szip hdf5
         set -x
         $NLN $EXECgfs/mkncgbbepx .
  ./mkncgbbepx <<EOF

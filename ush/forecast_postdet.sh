@@ -279,8 +279,8 @@ EOF
     ${NLN} "${FLTFILEGFSF00:-${PARMgfs}/post/postxconfig-NT-GFS-F00-TWO.txt}"    "${DATA}/postxconfig-NT_FH00.txt"
     if [[ $cplchp = .true. ]]; then
     ${NLN} "${PARMgfs}/post/post_tag_gfs${LEVS}_catchem"             "${DATA}/itag"
-    ${NLN} "${FLTFILEGFS:-${PARMgfs}/post/postxconfig-NT-CCPP-CHEM.txt}"         "${DATA}/postxconfig-NT.txt"
-    ${NLN} "${FLTFILEGFSF00:-${PARMgfs}/post/postxconfig-NT-CCPP-CHEM.txt}"      "${DATA}/postxconfig-NT_FH00.txt"
+    ${NLN} "${FLTFILEGFS:-${PARMgfs}/post/postxconfig-NT-CCPP-CHEM-MET.txt}"         "${DATA}/postxconfig-NT.txt"
+    ${NLN} "${FLTFILEGFSF00:-${PARMgfs}/post/postxconfig-NT-CCPP-CHEM-MET.txt}"      "${DATA}/postxconfig-NT_FH00.txt"
     fi
     ${NLN} "${POSTGRB2TBL:-${PARMgfs}/post/params_grib2_tbl_new}"                "${DATA}/params_grib2_tbl_new"
     ${NCP} ${PARMgfs}/post/optics_luts_*.dat ${DATA}/

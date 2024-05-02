@@ -1,0 +1,13 @@
+2024-04-27 06:40:09 +0000 :: hfe04 :: Submitting gfsgetic
+2024-04-27 06:40:09 +0000 :: hfe04 :: Submission status of gfsgetic is pending at druby://10.184.6.61:36585
+2024-04-27 06:40:31 +0000 :: hfe02 :: Submission status of previously pending gfsgetic is success, jobid=58788279
+2024-04-27 06:40:31 +0000 :: hfe02 :: Task gfsgetic, jobid=58788279, in state SUCCEEDED (COMPLETED), ran for 2.0 seconds, exit status=0, try=1 (of 2)
+2024-04-27 06:40:31 +0000 :: hfe02 :: Submitting gfsinit
+2024-04-27 06:40:32 +0000 :: hfe02 :: Submission status of gfsinit is pending at druby://10.184.3.62:40187
+2024-04-27 06:45:14 +0000 :: hfe10 :: Submission status of previously pending gfsinit is success, jobid=58788311
+2024-04-27 06:45:14 +0000 :: hfe10 :: Task gfsinit, jobid=58788311, in state SUCCEEDED (COMPLETED), ran for 167.0 seconds, exit status=0, try=1 (of 2)
+2024-04-27 06:45:14 +0000 :: hfe10 :: Submitting mssFV3ICS
+2024-04-27 06:45:14 +0000 :: hfe10 :: Submission status of mssFV3ICS is pending at druby://10.184.12.61:46399
+2024-04-27 06:50:09 +0000 :: hfe02 :: Submission status of previously pending mssFV3ICS is success, jobid=58788358
+2024-04-27 06:50:09 +0000 :: hfe02 :: Task mssFV3ICS, jobid=58788358, in state SUCCEEDED (COMPLETED), ran for 17.0 seconds, exit status=0, try=1 (of 2)
+2024-04-27 06:50:09 +0000 :: hfe02 :: This cycle is complete: Success
